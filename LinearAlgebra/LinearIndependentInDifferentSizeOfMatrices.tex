@@ -1,0 +1,116 @@
+\documentclass[12pt]{article}
+\usepackage{lmodern}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath, amssymb}
+\usepackage{tabularx}
+\usepackage{geometry}
+\usepackage{multirow}
+\usepackage{graphicx}
+\usepackage[table]{xcolor}
+\usepackage{draftwatermark}
+
+\title{Linearly Independent in Different Sizes of Matrix}
+
+\SetWatermarkText{WongAndyStarSB}
+\SetWatermarkScale{0.6}
+\SetWatermarkColor{blue!03}
+
+\geometry{margin=1in}
+
+% centralized style management
+\newcommand{\myvec}[1]{\vec{#1}}
+\definecolor{mycolorN} {HTML}{007514}   % hsl: 130, 100, 23
+\definecolor{mycolorNr}{HTML}{007575}   % hsl: 180, 100, 23
+\definecolor{mycolorNc}{HTML}{4e7500}   % hsl:  80, 100, 23
+\renewcommand{\arraystretch}{2}
+
+\begin{document}
+
+\section*{Linearly Independent in Different Sizes of Matrix}
+\raggedright
+
+for a matrix $A$ in $\textcolor{mycolorNr}{n_r} \times \textcolor{mycolorNc}{n_c}$, \newline
+if the \emph{column vectors} of A are {\large \emph{linearly independent}}, then
+
+\medskip
+
+
+\begin{tabularx}{\textwidth}{XXc}
+    \arrayrulecolor{black!30} \hline \arrayrulecolor{black}
+        $\textcolor{mycolorN}{n} = \textcolor{mycolorNr}{n_r} = \textcolor{mycolorNc}{n_c}$ \textbf{(Square)} 
+        & \textbf{$\textcolor{mycolorNr}{n_r} > \textcolor{mycolorNc}{n_c}$ (Tall)} 
+        & \textbf{$\textcolor{mycolorNr}{n_r} < \textcolor{mycolorNc}{n_c}$ (Fat)}
+    \\ \hline
+        $\iff$ only trivial solution \newline
+            \phantom{$\iff$} in $A \myvec{x} = \myvec{0}$ 
+        & $\iff$ only trivial solution \newline
+            \phantom{$\iff$} in $A\myvec{x} = \myvec{0}$ 
+        & \multirow[c]{9.5}{*}{\textbf{NOT POSSIBLE}}
+    \\ \arrayrulecolor{black!30} \cline{1-2} \arrayrulecolor{black}
+        $\iff Col A = \mathbb{R}^{\textcolor{mycolorN}{n}}$ \newline 
+            \phantom{$\iff$} $Nul A = \{\myvec{0}\}$ \newline 
+            \phantom{$\iff$} $rank A = \textcolor{mycolorN}{n}$ (full) 
+        & $\iff Col A = \mathbb{R}^{\textcolor{mycolorNr}{n_r}}$ \newline 
+            \phantom{$\iff$} $Nul A = \{\myvec{0}\}$ \newline 
+            \phantom{$\iff$} $rank A = \textcolor{mycolorNc}{n_c}$ (full) 
+        & 
+    \\ \arrayrulecolor{black!30} \cline{1-2} \arrayrulecolor{black}
+        $\iff \myvec{x}$ and $\myvec{v}$ are \newline
+            \phantom{$\iff$} \emph{one-to-one} \newline
+            \phantom{$\iff$} in $A\myvec{x} = \myvec{v}$
+        & $\iff \myvec{x}$ and $\myvec{v}$ are \newline
+            \phantom{$\iff$} \emph{one-to-one} \newline
+            \phantom{$\iff$} in $A\myvec{x} = \myvec{v}$
+        &
+    \\ \arrayrulecolor{black!70} \cline{1-2} \arrayrulecolor{black}
+        $\iff$ unique solution \newline
+            \phantom{$\iff$} in $A\myvec{x} = \myvec{v}$ 
+        & $\iff$ 0 or 1 solution \newline
+            \phantom{$\iff$} in $A\myvec{x} = \myvec{v}$ \newline 
+            \phantom{$\iff$} (may not exist, \textsuperscript{1} \newline
+            \phantom{$\iff$(} if exist then unique \textsuperscript{2}) 
+        & 
+    \\ \arrayrulecolor{black!30} \cline{1-2} \arrayrulecolor{black}
+        $\iff \det A \neq 0$ \newline 
+            \phantom{$\iff$} \emph{Invertible} \newline 
+            \phantom{$\iff$} $A^{-1}$
+        & \emph{(not applicable)} 
+        & 
+    \\ \hline
+\end{tabularx}
+
+
+\vfill
+
+
+\begin{minipage}[t]{0.48\textwidth}
+    \raggedright
+    
+    \textsuperscript{1}/ \\
+    \textbf{Consider} $A\myvec{x}=\myvec{v}$: \\
+    it represents $\textcolor{mycolorNr}{n_r}$ equations with \\
+    \phantom{it represents }$\textcolor{mycolorNc}{n_c}$ unknowns\\
+    in other words:\\
+    \hspace*{1em} num of restrictions $>$ num of variables.\\
+    \hspace*{1em} $\rightarrow$ no solutions \\
+    \hspace*{1em} \phantom{$\rightarrow$} \small{(unless the restrictions overlaps)}
+\end{minipage}
+\begin{minipage}[t]{0.48\textwidth}
+    \raggedright
+
+    \textsuperscript{2}/ \\
+    \textbf{Consider} the case where\\ 
+    $A\myvec{x} = \myvec{v}$ is consistent\\
+    Let $\myvec{x}_1$ and $\myvec{x}_2$ be solutions of $\myvec{x}$
+    \begin{align*}
+        A\myvec{x}_1 = \myvec{v} \text{ and } &A\myvec{x}_2 = \myvec{v}\\
+        A\myvec{x}_1 - A\myvec{x}_2 &= \myvec{v} - \myvec{v}\\
+        A(\myvec{x}_1 - \myvec{x}_2) &= \myvec{0}\\
+        \myvec{x}_1 - \myvec{x}_2 &= \myvec{0} && (Nul A = \{\myvec{0}\})\\
+        \myvec{x}_1 &= \myvec{x}_2
+    \end{align*}
+    $\rightarrow$ $A\myvec{x} = \myvec{v}$ has unique solution for $\myvec{x}$ if \\
+    \phantom{$\rightarrow$} the equation is consistent
+\end{minipage}
+
+\end{document}

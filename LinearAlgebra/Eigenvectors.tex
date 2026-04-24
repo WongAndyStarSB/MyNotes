@@ -1,0 +1,149 @@
+\documentclass[11pt]{article}
+
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{array}
+\usepackage{bm}
+\usepackage{esvect}
+\usepackage{geometry}
+\usepackage{makecell}
+\usepackage{siunitx}
+
+\geometry{margin=1in}
+
+\DeclareRobustCommand{\myvec}[1]{\vv{\mathbf{#1}}}
+\newcommand{\myunitvec}[1]{\bm{\hat{\mathbf{#1}}}}
+\newcommand{\myvectsp}[1]{\bm{\mathcal{#1}}}
+\newcommand{\myset}[1]{\mathcal{#1}}
+\newcommand{\mymat}[1]{\mathrm{#1}}
+
+\title{Diagonalization of Matices}
+\author{\texttt{O5-37-2718281828459}}
+
+\raggedright
+\begin{document}
+
+    \maketitle
+
+    \newpage
+    \tableofcontents
+
+    \newpage
+    \section{Change of Basis}
+    \subsection*{Quick Review: From Axioms to Coordinates}
+    Let $\myvectsp{V}$ be a vector space and $\myset{B}$ be any basis for $\myvectsp{V}$
+    \begin{itemize}
+        \item \textbf{Basis Uniqueness:} For any $x \in \myvectsp{V}$, the coordinate vector $[\myvec{x}]_\myset{B}$ is unique.
+        \item \textbf{Origin Invariance:} All coordinate systems in $\myvectsp{V}$ share the same $\myvec{0}$ vector.
+        \item \textbf{Linearity:} The transition between $[\myvec{x}]_{\mathcal{B}1}$ and $[\myvec{x}]_{\mathcal{B}2}$ is a \textit{linear transformation}. 
+    \end{itemize}
+    \subsection{Core Requirement: Shared Vector Space}
+    For the change of basis $[x]_\myset{B} \to [x]_\myset{C}$ to be valid, both sets must be bases for the \textbf{same underlying vector space} $\myvectsp{V}$. 
+    \begin{equation}
+        \myset{B}, \myset{C} \subset \myvectsp{V} \quad \text{and} \quad \text{span}(\myset{B}) = \text{span}(\myset{C}) = \myvectsp{V}
+    \end{equation}
+    This ensures that every vector $\myvec{v} \in \myvectsp{V}$ has a unique representation in both coordinate systems.
+
+    \subsection{The Transition Matrix}
+    Since change of basis is a linear transformation, it can be expressed using a matrix
+    \begin{quote}
+        Note: in the later parts, we will use the following notations: \vspace{\abovedisplayshortskip}
+
+        \begin{tabular}{l l @{}}
+            $\myvec{v}$ & a vector v in space, in standard basis, or independent on any basis \\[1ex]
+            $v_k$ & the k-th component of $\myvec{v}$ \\[1ex]
+            $[\myvec{v}]_\myset{B}$ & the vector $\myvec{v}$ expressed in a basis $\myset{B}$ \\[1ex]
+            $(v_\myset{B})_k$ & the k-th component of $[\myvec{v}]_\myset{B}$ \\[1ex]
+            $\mymat{P}_{\myset{B}2\leftarrow\myset{B}1}$ & a transition matrix $\mymat{P}$ that translates a vector from basis $\myset{B}_1$ to basis $\myset{B}_2$
+        \end{tabular}
+    \end{quote}
+    \subsubsection{Transit From Standard Basis}
+    Let $\myset{S}$ be the \textbf{standard basis} of $\mathbb{R}^n$, $\myset{B} = \{\myvec{b}_1, \dots, \myvec{b}_n\}$ be a basis for $\mathbb{R}^n$, and $\myvec{v} \in \mathbb{R}^n$\\
+    if we want to find $[\myvec{v}]_\myset{S}$ from $[\myvec{v}]_\myset{B}$, we have
+    \begin{align*}
+    \myvec{v} = [\myvec{v}]_{\myset{S}} = {(v_\myset{B})}_1\myvec{b}_1 + {(v_\myset{B})}_2\myvec{b}_2 + \dots + {(v_\myset{B})}_n\myvec{b}_n 
+        & = \bigg[ \myvec{b}_1 \, \myvec{b}_2 \, \dots \, \myvec{b}_n \bigg] 
+        \begin{bmatrix} {(v_\myset{B})}_1 \\ {(v_\myset{B})}_2 \\ \vdots \\ {(v_\myset{B})}_n \end{bmatrix} \\
+        & = \bigg[ \myvec{b}_1 \, \myvec{b}_2 \, \dots \, \myvec{b}_n \bigg]\,[\myvec{v}]_\myset{B}
+    \end{align*}
+    Therefore, the transition matrix that translate vectors in basis $\myset{B}$ to standard basis $\myset{S}$, is given by,
+    \begin{equation}
+        \mymat{P}_{\myset{S}\leftarrow\myset{B}} = \bigg[ \myvec{b}_1 \, \myvec{b}_2 \, \dots \, \myvec{b}_n \bigg]
+    \end{equation} 
+    and to find expression in $\myset{S}$ of a vector expressed in basis $\myset{B}$, we have:
+    \begin{equation}
+        \myvec{v} = [\myvec{v}]_{\myset{S}} = \mymat{P}_{\myset{S}\leftarrow\myset{B}} \, [\myvec{v}]_{\myset{B}}
+    \end{equation}
+        
+    
+
+    \subsubsection{General Formula for Transiting in Two Basis}
+
+    Let $\myset{B} = \{\myvec{b}_1, \dots, \myvec{b}_n\}$ and $\myset{C}$ be two bases for $\myvectsp{V}$. To find the coordinate vector $[\myvec{v}]_{\myset{C}}$ from $[\myvec{v}]_{\myset{B}}$, we use the transition matrix $\mymat{P}_{\myset{C} \leftarrow \myset{B}}$:
+
+    \begin{equation}
+        [\myvec{v}]_{\myset{C}} = \mymat{P}_{\myset{C} \leftarrow \myset{B}}\,[\myvec{v}]_{\myset{B}}
+    \end{equation}
+
+    The columns of this matrix are the coordinate vectors of the basis $\myset{B}$ relative to the basis $\myset{C}$:
+
+    \begin{equation}
+        \mymat{P}_{\myset{C} \leftarrow \myset{B}} = 
+        \begin{bmatrix} 
+            [\myvec{b}_1]_{\myset{C}} & [\myvec{b}_2]_{\myset{C}} & \dots & [\myvec{b}_n]_{\myset{C}} 
+        \end{bmatrix}
+    \end{equation}
+
+    This matrix essentially "encodes" how to map the unit steps of the first grid onto the second grid.
+
+    % \subsection{Invert the Transition}
+
+    \newpage
+    \subsection{Change of Basis for a Linear Transformation}
+    
+    Think of an example, in 2d, in the standard basis, if we want to rotate our plane anti-clockwise by $\pi/2$ (or $\ang{90}$), we use a rotation matrix $\mymat{R}$:
+    \[ \mymat{R} = \begin{bmatrix}
+        0 & -1 \\
+        1 & 0
+    \end{bmatrix} \]
+    what if we want to express the transformation of "anti-clockwise $\pi/2$ rotation" in another basis $\myset{B}$?\\
+    or in other words, what is $[\mymat{R}]_\myset{B}$? \vspace{\belowdisplayskip}
+
+    \subsubsection{Transitioning from the Standard Basis}
+
+    Let $[\myvec{u}]_{\myset{B}}$ be a vector expressed in basis $\myset{B}$\\
+    we want to find $[\myvec{v}]_{\myset{B}}$, \\
+    \quad the resultant vector after any linear transformation $\mymat{L}$, expressed in basis $\myset{B}$ \vspace{\belowdisplayshortskip}
+
+    Since we don't know how to do the transformation directly in basis $\myset{B}$, we \\
+    \begin{quote}
+        first, transit it into standard basis
+        \[ \myvec{u} = \mymat{P}_{\myset{S}\leftarrow\myset{B}}\,[\myvec{u}]_{\myset{B}} \]
+        then, we do the transformation to the vector, in our familiar standard basis,
+        \[ \myvec{v} = \mymat{L}\myvec{u} \]
+        afterall, we transit it back to expressing in basis $\myset{B}$ \\
+        \[ [\myvec{v}]_{\myset{B}} = \mymat{P}_{\myset{B}\leftarrow{S}} \myvec{v} \qquad \text{where } \mymat{P}_{\myset{B}\leftarrow{S}} = (\mymat{P}_{\myset{S}\leftarrow{B}})^{-1}\]
+    \end{quote}
+    Therefore, given a transition matrix $\mymat{P} = \mymat{P}_{\myset{S}\leftarrow\myset{B}}$ \\
+    for any linear transformation $\mymat{L} = [\mymat{L}]_{\myset{S}}$,\\ 
+    the equation to find $[\myvec{v}]_{\myset{B}}$ from $[\myvec{u}]_{\myset{B}}$:
+    \begin{equation}
+        [\myvec{v}]_{\myset{B}} = \mymat{P}^{-1} \mymat{L} \mymat{P} [\myvec{u}]_{\myset{B}}
+    \end{equation}
+
+    Therefore, we have the formula for $[\mymat{L}]_{\myset{B}}$:
+    \begin{equation}
+        [\mymat{L}]_{\myset{B}} = \mymat{P}^{-1} \mymat{L} \mymat{P}
+    \end{equation}
+
+    \subsubsection{General Formula}
+    For any linear transformation $[\mymat{L}]_{\myset{B}}$ in basis $\myset{B}$, \\
+    the same transformation that applicable on vectors in basis $\myset{C}$, $[\mymat{L}]_{\myset{C}}$, is given by
+    \begin{equation}
+        [\mymat{L}]_{\myset{C}} = \mymat{P}_{\myset{C}\leftarrow\myset{B}} \cdot [\mymat{L}]_{\myset{B}} \cdot \mymat{P}_{\myset{B}\leftarrow\myset{C}}
+    \end{equation}
+    
+    \newpage
+    \section{Eigenvectors and Diagonalization}
+
+\end{document}

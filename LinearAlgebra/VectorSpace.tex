@@ -1,0 +1,60 @@
+\documentclass[11pt]{article}
+
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{array}
+\usepackage{bm}
+\usepackage{esvect}
+\usepackage{geometry}
+\usepackage{makecell}
+
+\geometry{margin=1in}
+
+\DeclareRobustCommand{\myvec}[1]{\vv{\mathbf{#1}}}
+\newcommand{\myunitvec}[1]{\bm{\hat{\mathbf{#1}}}}
+
+\title{VectorSpace}
+\author{O5-37-2718281828459}
+
+\raggedright
+\begin{document}
+    \section{Definition}
+    \subsection{}
+    {
+        \newcommand{\myV}{\bm{V}}
+
+        A vector space $\myV$ over $\mathbb{R}$ is a set endowed with two operations, \\
+        \textbf{addition} and \textbf{scalar-multiplication}
+        
+        \begin{quote}
+            
+            I. Under vector addition, $\myV$ forms an Abelian Group:
+    
+            \renewcommand{\arraystretch}{2.5}
+            \begin{tabular}{l l l l @{}}
+                \hline
+                1. & \textbf{Closure}:       & $\myvec{u} + \myvec{v} \in \myV$                                                     & for all $\myvec{u}, \myvec{v} \in \myV$ \\
+                2. & \textbf{Associativity}: & $(\myvec{u} + \myvec{v}) + \myvec{w} = \myvec{u} + (\myvec{v} + \myvec{w})$           & for all $\myvec{u}, \myvec{v}, \myvec{w} \in \myV$ \\
+                3. & \textbf{Identity}:      & \makecell[l]{There exists a zero vector $0 \in \myV$\\ such that $\myvec{u} + \myvec{0} = \myvec{0} + \myvec{u} = \myvec{u}$} & for all $\myvec{u} \in \myV$ \\
+                4. & \textbf{Inverse}:       & \makecell[l]{There exists a inverse vector $\myvec{v} \in \myV$\\ such that $\myvec{u} + \myvec{v} = \myvec{0}$}             & for all $\myvec{u} \in \myV$ \\
+                5. & \textbf{Commutative}:   & $\myvec{u} + \myvec{v} = \myvec{v} + \myvec{u}$                                       & for all $\myvec{u},\myvec{v} \in \myV$ \\
+                \hline
+            \end{tabular} 
+            \vspace*{\belowdisplayskip}
+    
+            \noindent
+            II. Under vector scalar multiplication, $V$ satisfies the following properties:
+            
+            \begin{tabular}{ l >{\bfseries}l l l @{}}
+                \hline
+                1. & Closed under scalar mul.       & $k\myvec{u} \in \myV$                                & \makecell[l]{for all $k \in \mathbb{R}$\\ and all $\myvec{u} \in \myV$} \\
+                2. & Distributes over vector add    & $k(\myvec{u}+\myvec{v}) = k\myvec{u} + k\myvec{v}$    & \makecell[l]{for all $k \in \mathbb{R}$\\ and all $\myvec{u}, \myvec{v} \in \myV$} \\
+                3. & Distributes over scalar add    & $(k + l)\myvec{u} = k\myvec{u} + l\myvec{u}$          & \makecell[l]{for all $k, l \in \mathbb{R}$\\ and all $\myvec{u} \in \myV$} \\
+                4. & Scalar Associativity:          & $(kl)\myvec{u} = k(l\myvec{u})$                       & \makecell[l]{for all $k, l \in \mathbb{R}$\\ and all $\myvec{u} \in \myV$} \\
+                5. & Identity element of mul.       & $1\myvec{u} = \myvec{u}$                              & for all $\myvec{u} \in \myV$ \\
+                \hline
+            \end{tabular}
+        \end{quote}
+    }
+
+\end{document}
