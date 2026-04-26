@@ -13,11 +13,12 @@
 
 \DeclareRobustCommand{\myvec}[1]{\vv{\mathbf{#1}}}
 \newcommand{\myunitvec}[1]{\bm{\hat{\mathbf{#1}}}}
-\newcommand{\myvectsp}[1]{\bm{\mathcal{#1}}}
+\newcommand{\myvecsp}[1]{\bm{\mathcal{#1}}}
+\newcommand{\mysubvecsp}[1]{\bm{{#1}}}
 \newcommand{\myset}[1]{\mathcal{#1}}
-\newcommand{\mymat}[1]{\mathrm{#1}}
+\newcommand{\mymat}[1]{#1}
 
-\title{Diagonalization of Matices}
+\title{Diagonalization of Matrices}
 \author{\texttt{O5-37-2718281828459}}
 
 \raggedright
@@ -27,22 +28,44 @@
 
     \newpage
     \tableofcontents
+    
+    \newpage
+    \setcounter{section}{-1}
+    \section{Preliminaries}
+    \subsection{The Scalar Field}
+    Throughout this notes, $\mathbb{F}$ denotes the \textbf{scalar field} associated with a vector space. 
+    \begin{itemize}
+        \item The choice of $\mathbb{F}$ determines the "allowable" values for eigenvalues and coordinate entries.
+        \item \textbf{Contextual Dependency:} 
+        \begin{itemize}
+            \item In a real-variable context, $\mathbb{F} = \mathbb{R}$.
+            \item In a complex-variable context, $\mathbb{F} = \mathbb{C}$.
+        \end{itemize}
+        \item Unless otherwise specified, properties involving the existence of $n$ eigenvalues or the guaranteed existence of eigenvectors assume $\mathbb{F} = \mathbb{C}$.
+    \end{itemize}
+
+    \subsection{Coordinate Spaces}
+    We distinguish between an abstract subspace $V$ and the entire $n$-dimensional coordinate universe:
+    \begin{itemize}
+        \item $\mathbb{F}^n$ represents the \textbf{entire vector space} (the domain and codomain of our transformations).
+        \item $V$ is used to denote an arbitrary subspace or a solution set (such as an eigenspace) within $\mathbb{F}^n$.
+    \end{itemize}
 
     \newpage
     \section{Change of Basis}
     \subsection*{Quick Review: From Axioms to Coordinates}
-    Let $\myvectsp{V}$ be a vector space and $\myset{B}$ be any basis for $\myvectsp{V}$
+    Let $\mysubvecsp{V}$ be a vector space and $\myset{B}$ be any basis for $\mysubvecsp{V}$
     \begin{itemize}
-        \item \textbf{Basis Uniqueness:} For any $x \in \myvectsp{V}$, the coordinate vector $[\myvec{x}]_\myset{B}$ is unique.
-        \item \textbf{Origin Invariance:} All coordinate systems in $\myvectsp{V}$ share the same $\myvec{0}$ vector.
-        \item \textbf{Linearity:} The transition between $[\myvec{x}]_{\mathcal{B}1}$ and $[\myvec{x}]_{\mathcal{B}2}$ is a \textit{linear transformation}. 
+        \item \textbf{Basis Uniqueness:} For any $\myvec{v} \in \mysubvecsp{V}$, the coordinate vector $[\myvec{v}]_\myset{B}$ is unique.
+        \item \textbf{Origin Invariance:} All coordinate systems in $\mysubvecsp{V}$ share the same $\myvec{0}$ vector.
+        \item \textbf{Linearity:} The transition between $[\myvec{v}]_{\mathcal{B}_1}$ and $[\myvec{v}]_{\mathcal{B}_2}$ is a \textit{linear transformation}. 
     \end{itemize}
     \subsection{Core Requirement: Shared Vector Space}
-    For the change of basis $[x]_\myset{B} \to [x]_\myset{C}$ to be valid, both sets must be bases for the \textbf{same underlying vector space} $\myvectsp{V}$. 
+    For the change of basis $[x]_\myset{B} \to [x]_\myset{C}$ to be valid, both sets must be bases for the \textbf{same underlying vector space} $\mysubvecsp{V}$. 
     \begin{equation}
-        \myset{B}, \myset{C} \subset \myvectsp{V} \quad \text{and} \quad \text{span}(\myset{B}) = \text{span}(\myset{C}) = \myvectsp{V}
+        \myset{B}, \myset{C} \subset \mysubvecsp{V} \quad \text{and} \quad Span\,(\myset{B}) = Span\,(\myset{C}) = \mysubvecsp{V}
     \end{equation}
-    This ensures that every vector $\myvec{v} \in \myvectsp{V}$ has a unique representation in both coordinate systems.
+    This ensures that every vector $\myvec{v} \in \mysubvecsp{V}$ has a unique representation in both coordinate systems.
 
     \subsection{The Transition Matrix}
     Since change of basis is a linear transformation, it can be expressed using a matrix
@@ -54,7 +77,7 @@
             $v_k$ & the k-th component of $\myvec{v}$ \\[1ex]
             $[\myvec{v}]_\myset{B}$ & the vector $\myvec{v}$ expressed in a basis $\myset{B}$ \\[1ex]
             $(v_\myset{B})_k$ & the k-th component of $[\myvec{v}]_\myset{B}$ \\[1ex]
-            $\mymat{P}_{\myset{B}2\leftarrow\myset{B}1}$ & a transition matrix $\mymat{P}$ that translates a vector from basis $\myset{B}_1$ to basis $\myset{B}_2$
+            $\mymat{P}_{\myset{B}_2\leftarrow\myset{B}_1}$ & a transition matrix $\mymat{P}$ that translates a vector from basis $\myset{B}_1$ to basis $\myset{B}_2$
         \end{tabular}
     \end{quote}
     \subsubsection{Transit From Standard Basis}
@@ -79,7 +102,7 @@
 
     \subsubsection{General Formula for Transiting in Two Basis}
 
-    Let $\myset{B} = \{\myvec{b}_1, \dots, \myvec{b}_n\}$ and $\myset{C}$ be two bases for $\myvectsp{V}$. To find the coordinate vector $[\myvec{v}]_{\myset{C}}$ from $[\myvec{v}]_{\myset{B}}$, we use the transition matrix $\mymat{P}_{\myset{C} \leftarrow \myset{B}}$:
+    Let $\myset{B} = \{\myvec{b}_1, \dots, \myvec{b}_n\}$ and $\myset{C}$ be two bases for $\mysubvecsp{V}$. To find the coordinate vector $[\myvec{v}]_{\myset{C}}$ from $[\myvec{v}]_{\myset{B}}$, we use the transition matrix $\mymat{P}_{\myset{C} \leftarrow \myset{B}}$:
 
     \begin{equation}
         [\myvec{v}]_{\myset{C}} = \mymat{P}_{\myset{C} \leftarrow \myset{B}}\,[\myvec{v}]_{\myset{B}}
@@ -106,7 +129,7 @@
         0 & -1 \\
         1 & 0
     \end{bmatrix} \]
-    what if we want to express the transformation of "anti-clockwise $\pi/2$ rotation" in another basis $\myset{B}$?\\
+    what if we want a matrix of transformation of "anti-clockwise $\pi/2$ rotation" that applicable on vectors in another basis $\myset{B}$?\\
     or in other words, what is $[\mymat{R}]_\myset{B}$? \vspace{\belowdisplayskip}
 
     \subsubsection{Transitioning from the Standard Basis}
@@ -144,6 +167,203 @@
     \end{equation}
     
     \newpage
-    \section{Eigenvectors and Diagonalization}
+    \section{Eigenvectors}
+
+    \subsection{Definitions}
+    \subsubsection{Eigenvectors and Eigenvalues}
+    \textbf{Eigenvector} (or characteristic vector) is a non-zero vector that \\
+    has its direction un\large \textbf{changed} (or reversed, or shrunk into a point) in a linear transformation
+    \vspace{\belowdisplayshortskip}
+
+    More precisely, an eigenvector $\myvec{v}$ of a linear transformation $\mymat{T}$ is scaled by a constant factor $\lambda$ when the linear transformation is applied to it
+    \vspace{\belowdisplayshortskip}
+
+    \noindent
+    \begin{minipage}{\linewidth}
+        An eigenvector $\myvec{v}$ suits the following equation
+        \begin{equation}
+            \mymat{T}\myvec{v} = \lambda\myvec{v}, \qquad \myvec{v} \ne \myvec{0}
+        \end{equation} 
+        \begin{tabbing}
+            where \= $\mymat{T}$ is any linear transformation, and\\
+            \> the scalar $\lambda$ is the \textbf{eigenvalue} (or characteristic value) of $\mymat{T}$ 
+        \end{tabbing}
+    \end{minipage}
+    \hbox{}
+
+    \noindent \rule{\textwidth}{0.1pt}    
+    if we have
+    \[ \mymat{T}\,\myvec{x}_1 = \lambda_1 \myvec{x}_1, \qquad \myvec{x}_1 \ne \myvec{0} \]
+    \begin{center}
+        where $\lambda_1$ is one of the eigenvalues
+    \end{center}
+    then, $\myvec{x}_1$ is called the eigenvector(s) of $\mymat{T}$ corresponds to $\lambda_1$\\
+    the solution set for $\myvec{x}_1$, plus the zero vector, is called the eigenspace of $\lambda_1$, denoted by $\mysubvecsp{E}_{\lambda_1}$
+    
+
+    \subsubsection{Eigenspace}
+    For a given eigenvalue $\lambda$, the \textbf{eigenspace} $\mysubvecsp{E}_\lambda$ is a vector space, it is the set of all eigenvectors corresponding to $\lambda$ plus the zero vector. 
+    \begin{equation}
+        \mysubvecsp{E}_\lambda = \{ \myvec{v} \mid \mymat{T}\myvec{v} = \lambda\myvec{v} \} = \text{null}(\mymat{T}-\lambda \mymat{I})
+    \end{equation}
+
+    \newpage
+    \subsection{Characteristic Equation}
+    The characteristic equation is an equation that is very useful for \\
+    finding eigenvalues for a square matrix $\mymat{T}$
+    \begin{equation}
+        \det(\mymat{T}-\lambda \mymat{I}) = 0
+    \end{equation}
+
+    \subsubsection{Derivation}
+    \begin{align*}
+        \mymat{T}\myvec{v} &= \lambda \myvec{v}\\
+        \mymat{T}\myvec{v} - \lambda \myvec{v} &= \myvec{0}\\
+        (\mymat{T} - \lambda \mymat{I})\myvec{v} &= \myvec{0}
+    \end{align*}
+    This is a homogeneous linear system\\
+    \begin{quote}
+        for a homogeneous linear system $\mymat{A}\myvec{x} = \myvec{0}$, \\
+        \quad if $\det\mymat{A}\ne0$ \quad there are only the trivial solution ($\myvec{x} = \myvec{0}$) \\
+        \quad if $\det\mymat{A}=0$ \quad there are infinite many solutions for $\myvec{x}$
+    \end{quote}
+
+    since eigenvectors are non-zero vectors, \\
+    we want to find the solution $\myvec{v} \ne \myvec{0}$ for $(\mymat{T} - \lambda \mymat{I})\myvec{v} = \myvec{0}$,\\
+    $\therefore$ we look for \fbox{$\det(\mymat{T} - \lambda \mymat{I}) = 0$} \quad (infinite many solutions)\\
+    and this is our \textbf{characteristic equation}
+
+
+    \newpage
+    \subsection{Notable Properties}
+    \subsubsection{Number of Solutions for $\mymat{T}$ in $\mathbb{R}$ and $\mathbb{C}$}
+    To have eigenvectors, the linear transformation matrix $\mymat{T}$ must be a square ($n \times n$) matrix. \\
+    The behavior of its eigenvalues and eigenspaces depends significantly on the underlying field $\mathbb{F}$:
+
+    \paragraph{Case 1: Over the Real Field ($\mathbb{F} = \mathbb{R}$)}
+    \begin{itemize}
+        \item \textbf{Number of Eigenvalues:} There are between $0$ and $n$ real eigenvalues. 
+        \item \textbf{Existence:} A matrix may have \textit{no} real eigenvalues (e.g., a rotation matrix in $\mathbb{R}^2$).
+        \item \textbf{Total Dimension:} The sum of dimensions of all real eigenspaces can be zero: $0 \le \sum_{k} \dim(\mysubvecsp{E}_{\lambda_k}) \le n$. 
+    \end{itemize}
+
+    \paragraph{Case 2: Over the Complex Field ($\mathbb{F} = \mathbb{C}$)}
+    \begin{itemize}
+        \item \textbf{Number of Eigenvalues:} There are exactly $n$ eigenvalues, counting multiplicities (Fundamental Theorem of Algebra). 
+        \item \textbf{Existence:} Every $n \times n$ matrix has at least one distinct complex eigenvalue and at least one corresponding eigenvector. 
+        \item \textbf{Total Dimension:} The sum of dimensions of all complex eigenspaces is at least one: $1 \le \sum_{k} \dim(\mysubvecsp{E}_{\lambda_k}) \le n$. 
+    \end{itemize}
+
+    \paragraph{Universal Property:}
+    \begin{itemize}
+        \item $\mymat{T}$ must be a square ($n \times n$) matrix.
+        \item For \textbf{each} eigenvalue $\lambda$, $1 \le \text{dim}(\mysubvecsp{E}_\lambda) \le (\text{multiplicity of } \lambda \text{ in the characteristic equation})$
+    \end{itemize}
+    
+    \subsubsection{Eigenvalue of Inverse Matrix}
+    If $\mymat{T}^{-1}$ exists, the eigenvalues of $\mymat{T}^{-1}$ are the reciprocal of eigenvalues of $\mymat{T}$\\
+    derivation: Assume $\mymat{T}$ is invertable, let $\lambda$ and $\lambda'$ be the eigenvalues of $\mymat{T}$ and $\mymat{T}^{-1}$ respectively\\
+    Note that $\lambda \ne 0$ is always true when $\mymat{T}$ is invertible (think of the characteristic equation)
+    \begin{align*}
+        \mymat{T}\myvec{v} &= \lambda\myvec{v} \\
+        \mymat{T}^{-1} \mymat{T} \myvec{v} &= \mymat{T}^{-1} (\lambda \myvec{v}) \\
+        \myvec{v} &= \lambda \mymat{T}^{-1} \myvec{v} & \mymat{L}(k\myvec{v}) = k\mymat{L}(\myvec{v}) \text{ for any lin. transf. function }\mymat{L}\\
+        (1/\lambda)\myvec{v} &= \mymat{T}^{-1} \myvec{v}\\
+        \lambda' &= 1/\lambda & \text{by definition of eigenvalue}
+    \end{align*}
+    \subsubsection{[just saw from a video, not know what it is called, talk and derive it later]}
+    \[ \prod_{k} \lambda_k = \det \mymat{T} \]
+
+    % In the following chapters, we will only be focusing on $\mathbb{F} = \mathbb{R}$
+
+    \newpage
+    \section{Diagonalization}
+    \subsection{Diagonalizable Matrices}
+    For a $n \times n$ square matrix $\mymat{T}$ that has $m$ distinct eigenvalues $\lambda_1, \lambda_2, \dots, \lambda_m$ to be \textbf{diagonalizable}, the total dimension of its eigenspaces spans the entire vector space
+    \begin{equation}
+        \mymat{E}_{\lambda_1} \oplus \mymat{E}_{\lambda_2} \oplus \dots \oplus \mymat{E}_{\lambda_m} = \mathbb{F}^n
+    \end{equation}
+    In practical calculation, this means the sum of the \textbf{geometric multiplicities} must equal the order of the matrix:
+    \begin{equation}
+        \sum_{k=1}^{m} \dim(\mysubvecsp{E}_{\lambda_k}) = n
+    \end{equation}
+
+    \subsection{Eigenbasis}
+    For a \textbf{diagonalizable} matrix $\mymat{T}$ that has distinct eigenvalues $\lambda_1, \lambda_2, \dots, \lambda_m$, \\
+    \textbf{eigenbasis} is a basis $\myset{B} = \myvec{b}_1, \myvec{b}_2, \dots, \myvec{b}_n$ for the entire vector space
+    \[ Span\,(\myset{B}) = \mathbb{F}^n \]
+    In other words, when the matrix is diagonalizable, the union of the bases of all its eigenspaces forms 
+    an eigenbasis for the whole underlying vector space $\mathbb{F}^n$
+    
+    \subsection{The Diagonalization Process}
+    Just as the name implies, applying a \textbf{diagonalization} on a diagonalizable matrix produces a \textbf{diagonal matrix}. It works as follows.
+    
+    \subsubsection{The way for a Matrix to record a Linear Transformation}
+    Under $\mathbb{F}^n$, using the basis $\myset{B} = \{ \myvec{b}_1, \myvec{b}_2, \dots, \myvec{b}_n \}$ \vspace{1ex}
+
+    Let $T$ be a $m \times n$ matrix and $L$ be a linear transformation function such that
+    \[ \mymat{L}(\myvec{x}) = \mymat{T}\myvec{x} \qquad \text{ for any }n \times 1\text{ column vector }\myvec{x} \]
+    
+    The Matrix $\mymat{T}$ records $\mymat{L}$ by tracking how a set of vectors that equals to the basis vectors being transformed \textbf{relatively} to the basis vectors \\
+    
+    \begin{equation}
+        \mymat{T} = \bigg[ \big[\mymat{L}(\myvec{b}_1)\big]_{\myset{B}} \, \big[\mymat{L}(\myvec{b}_2)\big]_{\myset{B}} \, \dots \, \big[\mymat{L}(\myvec{b}_n)\big]_{\myset{B}} \bigg]
+    \end{equation}
+    if $m \ne n$, then the $\mymat{L}$ is a transformation from $\mathbb{F}^n$ to $\mathbb{F}^m$\\
+    if $m = n$, then, $\mymat{L}$ is a trasformation within the same dimension of $\mathbb{F}$
+    \vspace{1ex}
+
+    In diagonalization, we need a matrix that has eigenvectors, so let us focus on the $m = n$~case, where we have a $n \times n$~matrix~$\mymat{T}$
+
+    \begin{minipage}{\textwidth}
+        \subsubsection{Diagonalization}
+        Let $\mymat{T}$ be a $n \times n$ square matrix, and $\mymat{L}$ be the linear transformation function of $T$ 
+        \vspace{2ex}
+
+        If we use the standard basis $\myset{S} = \{ \myvec{s}_1, \myvec{s}_2, \dots, \myvec{s}_n \}$ to express the $\mymat{L}$, in matrix, we have 
+        \vspace{1ex}
+    
+        $[\mymat{L}(\myvec{s})]_\myset{S}$ means "how standard basis vector changes in $\mymat{L}$, relative to themselves"
+        \vspace{2ex}
+        
+        Let's see how it becomes if we switch our basis from $\myset{S}$ to the \\
+        set of eigenvectors, denote with $\myset{E} = \{ \myvec{e}_1, \myvec{e}_2, \dots, \myvec{e}_n \}$ 
+        \vspace{1ex}
+    
+        $[\mymat{L}(\myvec{e})]_\myset{E}$ means "how eigenvector changes in $\mymat{L}$, relative to themselves", so...
+        \[ [\mymat{L}(\myvec{e}_k)]_\myset{E} = \lambda_k [\myvec{e}_k]_{\myset{E}} = \lambda_k\,\myvec{\mymat{I}_k} \qquad \text{ where $\myvec{\mymat{I}_k}$ is the k-th column of the Identity Matrix }\]
+        Therefore, 
+        \begin{equation*}
+            \mymat{D} = [\mymat{T}]_{\myset{E}} = \Big[ [\mymat{L}(\myvec{e}_1)]_\myset{E}\,[\mymat{L}(\myvec{e}_2)]_\myset{E}\,\dots\,[\mymat{L}(\myvec{e}_n)]_\myset{E} \Big] = \Big[ \lambda_1\myvec{\mymat{I}_1}\,\lambda_2\myvec{\mymat{I}_2}\,\dots\,\lambda_n\myvec{\mymat{I}_n} \Big]
+        \end{equation*}
+        $\mymat{D}$ is called the diagonalized matrix of $\mymat{T}$, by recalling Change of Basis, we have
+        \begin{equation}
+            \mymat{D} = \mymat{P}^{-1} \mymat{T} \mymat{P} \qquad \text{ where }\mymat{P} = \mymat{P}_{\myset{S}\leftarrow\myset{E}} = \Big[ \myvec{e}_1\,\myvec{e}_2\,\dots\,\myvec{e}_n \Big]
+        \end{equation}
+    \end{minipage}
+    
+    \subsection{Similar Matrices}
+    A square matrix $\mymat{T}$ is diagonalizable if it is \textbf{similar} to a diagonal matrix $\mymat{D}$. This relationship is expressed through the factorization:
+    \begin{equation}
+        \mymat{T} = \mymat{P}\mymat{D}\mymat{P}^{-1}
+    \end{equation}
+    In other words, if $\mymat{D}$ is the diagonal matrix of $\mymat{T}$, $\mymat{T}$ and $\mymat{D}$ are \textbf{similar matrices} 
+    \paragraph{Components of the Factorization:}
+    \begin{itemize}
+        \item $\mymat{D}$ is the \textbf{diagonal matrix} containing the eigenvalues $\lambda_1, \dots, \lambda_n$ along its main diagonal.
+        \item $\mymat{P}$ is the \textbf{modal matrix} (or transition matrix), whose columns are the linearly independent eigenvectors $\myvec{b}_1, \dots, \myvec{b}_n$ that form the eigenbasis $\myset{B}$.
+        \item $\mymat{P}^{-1}$ transforms vectors from the standard basis into the eigenbasis coordinates.
+    \end{itemize}
+
+    \paragraph{Geometric Interpretation:}
+    The equation $\mymat{T} = \mymat{P}\mymat{D}\mymat{P}^{-1}$ represents a three-step process:
+    \begin{enumerate}
+        \item $\mymat{P}^{-1}$ changes the coordinate system of the input vector to the eigenbasis.
+        \item $\mymat{D}$ performs a simple scaling (stretching/shrinking) along the axes of the eigenbasis.
+        \item $\mymat{P}$ changes the resulting vector back to the standard basis.
+    \end{enumerate}
+    
+    \subsection{Diagonalization of Symmetric Matrices}
+    Let me have a rest before doing this part
 
 \end{document}

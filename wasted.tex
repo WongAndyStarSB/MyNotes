@@ -1,0 +1,50 @@
+\documentclass[11pt]{article}
+
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{array}
+\usepackage{bm}
+\usepackage{esvect}
+\usepackage{geometry}
+\usepackage{makecell}
+\usepackage{siunitx}
+
+\geometry{margin=1in}
+
+\DeclareRobustCommand{\myvec}[1]{\vv{\mathbf{#1}}}
+\newcommand{\myunitvec}[1]{\bm{\hat{\mathbf{#1}}}}
+\newcommand{\myvecsp}[1]{\bm{\mathcal{#1}}}
+\newcommand{\mysubvecsp}[1]{\bm{{#1}}}
+\newcommand{\myset}[1]{\mathcal{#1}}
+\newcommand{\mymat}[1]{#1}
+
+\title{Diagonalization of Matrices}
+\author{\texttt{O5-37-2718281828459}}
+
+\raggedright
+\begin{document}
+    \subsubsection{The way for a Matrix to record a Linear Transformation}
+    Under $\mathbb{F}^n$, using the basis $\myset{B} = \{ \myvec{b}_1, \myvec{b}_2, \dots, \myvec{b}_n \}$ \vspace{1ex}
+
+    Let $T = \Big[ \myvec{t}_1\,\myvec{t}_2\,\dots\,\myvec{t}_n \Big]$ be a $m \times n$ matrix and $L$ be a linear transformation function such that
+    \[ \mymat{L}(\myvec{x}) = \mymat{T}\myvec{x} \qquad \text{ for any }n \times 1\text{ column vector }\myvec{x} \]
+    
+    The Matrix $\mymat{T}$ records $\mymat{L}$ by tracking how the vectors being transformed, \textbf{relatively} \\
+    Since $\mymat{L}$ is a linear transformation, \\
+    \begin{itemize}
+        \item the transformation~applied to the vectors, or the motion~of~the~vectors, can be recorded simply just by the state of vectors at the two ends of the transformation, i.e. the original~vectors~$\myvec{u}$ and the transformed~vectors~$\myvec{v}$
+        \item the space is evenly-stretch, shrink or rotated, so the transformation is independent to any specific vector, or, the same transformation rule is applied to all vectors
+    \end{itemize} 
+    Since we actually does not care about any specific vectors, we just care about the relative transformation, we can directly set the $\myvec{u}$s to be a set of vectors = to the basis vectors, \vspace{1ex}
+
+    so they will be always $\{
+        \begin{bmatrix} 1 \\ 0 \\ \vdots \\ 0 \end{bmatrix}, 
+        \begin{bmatrix} 0 \\ 1 \\ \vdots \\ 0 \end{bmatrix}, 
+        \dots, 
+        \begin{bmatrix} 0 \\ 0 \\ \vdots \\ 1 \end{bmatrix} 
+    \}$ under the basis, and then the $\myvec{v}$s will be the matrix 
+    \begin{equation}
+        \mymat{T} = \Big[ [\mymat{L}(\myvec{b}_1)]_{\myset{B}} \Big]
+    \end{equation}
+    
+\end{document}
