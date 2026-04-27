@@ -7,7 +7,11 @@
 \usepackage{esvect}
 \usepackage{geometry}
 \usepackage{makecell}
+\usepackage{mathtools}
 \usepackage{siunitx}
+
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
 
 \geometry{margin=1in}
 
@@ -27,6 +31,14 @@
     \maketitle
 
     \newpage
+    \vspace*{\fill}
+    \begin{center}
+        \LARGE
+        \fontfamily{qzc}\selectfont\itshape The people who seek the truth are more important than the truth itself
+    \end{center}
+    \vspace*{\fill}
+
+    \newpage
     \tableofcontents
     
     \newpage
@@ -42,6 +54,7 @@
             \item In a complex-variable context, $\mathbb{F} = \mathbb{C}$.
         \end{itemize}
         \item Unless otherwise specified, properties involving the existence of $n$ eigenvalues or the guaranteed existence of eigenvectors assume $\mathbb{F} = \mathbb{C}$.
+        \item All matrices in this notes are real matrices
     \end{itemize}
 
     \subsection{Coordinate Spaces}
@@ -50,6 +63,23 @@
         \item $\mathbb{F}^n$ represents the \textbf{entire vector space} (the domain and codomain of our transformations).
         \item $V$ is used to denote an arbitrary subspace or a solution set (such as an eigenspace) within $\mathbb{F}^n$.
     \end{itemize}
+
+    \subsection{Inner Product and Norm}
+    The \textbf{inner product} $\langle \myvec{u}, \myvec{v} \rangle$ provides a way to measure angles and lengths within $\mathbb{F}^n$. 
+    \begin{itemize}
+        \item In $\mathbb{R}^n$, this is the standard dot product: $\myvec{u} \cdot \myvec{v}$.
+        \item In $\mathbb{C}^n$, we use the conjugate transpose: $\myvec{u}^* \myvec{v}$.
+    \end{itemize}
+
+    The \textbf{norm} (length) of a vector is defined by the inner product:
+    \begin{equation}
+        \|\myvec{v}\| = \sqrt{\langle \myvec{v}, \myvec{v} \rangle}
+    \end{equation}
+
+    Two vectors are \textbf{orthogonal} if and only if their inner product is zero:
+    \begin{equation}
+        \langle \myvec{u}, \myvec{v} \rangle = 0
+    \end{equation}
 
     \newpage
     \section{Change of Basis}
@@ -242,22 +272,25 @@
 
     \paragraph{Case 1: Over the Real Field ($\mathbb{F} = \mathbb{R}$)}
     \begin{itemize}
-        \item \textbf{Number of Eigenvalues:} There are between $0$ and $n$ real eigenvalues. 
-        \item \textbf{Existence:} A matrix may have \textit{no} real eigenvalues (e.g., a rotation matrix in $\mathbb{R}^2$).
+        \item \textbf{Number of Eigenvalues:} \\
+            There are between $0$ and $n$ real eigenvalues. \\
+            A matrix may have \textit{no} real eigenvalues (e.g., a rotation matrix in $\mathbb{R}^2$).
         \item \textbf{Total Dimension:} The sum of dimensions of all real eigenspaces can be zero: $0 \le \sum_{k} \dim(\mysubvecsp{E}_{\lambda_k}) \le n$. 
     \end{itemize}
 
     \paragraph{Case 2: Over the Complex Field ($\mathbb{F} = \mathbb{C}$)}
     \begin{itemize}
-        \item \textbf{Number of Eigenvalues:} There are exactly $n$ eigenvalues, counting multiplicities (Fundamental Theorem of Algebra). 
-        \item \textbf{Existence:} Every $n \times n$ matrix has at least one distinct complex eigenvalue and at least one corresponding eigenvector. 
+        \item \textbf{Number of Eigenvalues:} \\
+            There are exactly $n$ eigenvalues, counting multiplicities.
         \item \textbf{Total Dimension:} The sum of dimensions of all complex eigenspaces is at least one: $1 \le \sum_{k} \dim(\mysubvecsp{E}_{\lambda_k}) \le n$. 
     \end{itemize}
 
     \paragraph{Universal Property:}
     \begin{itemize}
         \item $\mymat{T}$ must be a square ($n \times n$) matrix.
-        \item For \textbf{each} eigenvalue $\lambda$, $1 \le \text{dim}(\mysubvecsp{E}_\lambda) \le (\text{multiplicity of } \lambda \text{ in the characteristic equation})$
+        \item Every eigenvalue corresponds to one line of eigenvectors.
+        \item Since some eigenvalues are duplicated, the corresponding eigenvectors of a same eigenvalue can be all vectors on a plane or space of higher dimensions.\\
+            More precisely, for each distinct eigenvalue $\lambda_k$, $1 \le \text{dim}(\mysubvecsp{E}_{\lambda_k}) \le (\text{multiplicity of } \lambda_k \text{ in the characteristic equation})$
     \end{itemize}
     
     \subsubsection{Eigenvalue of Inverse Matrix}
@@ -363,7 +396,231 @@
         \item $\mymat{P}$ changes the resulting vector back to the standard basis.
     \end{enumerate}
     
-    \subsection{Diagonalization of Symmetric Matrices}
-    Let me have a rest before doing this part
+    \subsection{Orthogonal Diagonalization}
+    \subsubsection{Orthonormal Set}
+    \paragraph{Definition}
 
+    An orthonormal set of vectors is basically intersecting the concept of orthogonal set and normalization of vectors
+    \vspace{1ex}
+
+    A set of vectors $\myset{W} = \{\myvec{w}_1, \myvec{w}_2, \dots, \myvec{w}_m\}$ is an \textbf{orthonormal set} \\
+    if \textbf{all} the following requirements are satisfied
+    \begin{itemize}
+        \item $\myset{W}$ is orthogonal set
+        \begin{itemize}
+            \item $\myvec{w}_i \cdot \myvec{w}_j = 0 \quad \forall\,i, j \in \{1, \dots, m\} \text{ with } i \neq j$
+        \end{itemize}
+        \item $\|\myvec{w}_k\| = 1 \quad \forall\,k \in \{1, \dots, m\}$
+    \end{itemize}
+    \paragraph{Note:} $\myset{W} \not\subset \mathbb{F}^n$
+
+    
+    \subsubsection{Orthogonal Complements}
+    \paragraph{Orthogonal to a Set of Vectors}
+    \begin{quote}
+        a vector $\myvec{z}$ is orthogonal to a vector space $\mysubvecsp{V}$ if \\
+        \[ \myvec{z} \cdot \myvec{v} = 0 \quad \forall\,\myvec{v} \in \mysubvecsp{V} \]
+    \end{quote}
+    
+    \paragraph{Orthogonal Complement of a Set of Vectors} 
+    \begin{quote}
+        The \textbf{orthogonal complement} of a vector space $\mysubvecsp{V}$ (denoted~by~$\mysubvecsp{V}^{\perp}$) is the set of \textbf{all}~vectors~$\myvec{z}$ that are orthogonal to $\mysubvecsp{V}$
+        \vspace{1ex}
+        Note:
+        \begin{itemize}
+            \item $\mysubvecsp{V}^{\perp} \subset \mathbb{F}^n$
+            \item any $\myvec{z} \in \mysubvecsp{V}^{\perp}$ is also orthogonal to $Span\,(\mysubvecsp{V})$, $\implies \mysubvecsp{V}^{\perp} = (Span\,(\mysubvecsp{V}))^{\perp}$
+        \end{itemize}
+    \end{quote}
+    
+    \newpage
+    \subsubsection{Matrices with Orthonormal Column} \label{section3_5_3}
+    A $m \times n$ matrix with orthonormal columns implies that \\
+    by taking the columns as column vectors, all the column vectors forms an orthogonal set
+    
+    \paragraph{$\bm{\mymat{U}^T \mymat{U} = \mymat{I}}$ :}\mbox{}\vspace{1ex}
+
+    Let $\mymat{U} = \begin{bmatrix} \myvec{u}_1 & \myvec{u}_2 & \dots & \myvec{u}_n \end{bmatrix}$ be a $m \times n$ matrix, then
+    \begin{equation}
+        \mymat{U}\text{ has orthonormal columns} \iff \mymat{U}^T \mymat{U} = \mymat{I}
+    \end{equation}
+    Proof:
+    \begin{quote}
+        \begin{align*}
+            \renewcommand{\arraystretch}{1.5}
+            \mymat{U}^{T} \mymat{U} = 
+                \begin{bmatrix} \myvec{u}_1^T \\ \myvec{u}_2^T \\ \vdots \\ \myvec{u}_n^T \end{bmatrix}
+                \begin{bmatrix} \myvec{u}_1 & \myvec{u}_2 & \dots & \myvec{u}_n \end{bmatrix}
+                &= \begin{bmatrix}
+                    \myvec{u}_1^T \myvec{u}_1 & \myvec{u}_1^T \myvec{u}_2 & \dots  & \myvec{u}_1^T \myvec{u}_n \\
+                    \myvec{u}_2^T \myvec{u}_1 & \myvec{u}_2^T \myvec{u}_2 & \dots  & \myvec{u}_2^T \myvec{u}_n \\
+                    \vdots                    & \vdots                    & \ddots & \vdots \\
+                    \myvec{u}_n^T \myvec{u}_1 & \myvec{u}_n^T \myvec{u}_2 & \dots  & \myvec{u}_n^T \myvec{u}_n
+                \end{bmatrix} \\
+            &= \begin{bmatrix}
+                    \myvec{u}_1 \cdot \myvec{u}_1 & \myvec{u}_1 \cdot \myvec{u}_2 & \dots  & \myvec{u}_1 \cdot \myvec{u}_n \\
+                    \myvec{u}_2 \cdot \myvec{u}_1 & \myvec{u}_2 \cdot \myvec{u}_2 & \dots  & \myvec{u}_2 \cdot \myvec{u}_n \\
+                    \vdots                    & \vdots                    & \ddots & \vdots \\
+                    \myvec{u}_n \cdot \myvec{u}_1 & \myvec{u}_n \cdot \myvec{u}_2 & \dots  & \myvec{u}_n \cdot \myvec{u}_n
+                \end{bmatrix}
+        \end{align*}
+        Note that if $\mymat{U}$ has orthonormal column, by definition of orthonormal set
+        \begin{equation*}
+            \myvec{u}_i \cdot \myvec{u}_j = \delta_{ij} = \begin{cases}
+                1 & \text{if } i = j \\
+                0 & \text{if } i \ne j
+            \end{cases} \quad \forall\,i, j \in \{1, \dots, n\}
+        \end{equation*}
+        Therefore,
+        \begin{equation*}
+            \mymat{U}^T\mymat{U} = \begin{bmatrix}
+                1       & 0         & \dots     & 0 \\
+                0       & 1         & \dots     & 0 \\
+                \vdots  & \vdots    & \ddots    & \vdots \\
+                0       & 0         & \dots     & 1 
+            \end{bmatrix} = \mymat{I}_{n \times n}
+        \end{equation*}
+    \end{quote}
+
+    \paragraph{Other Properties}\mbox{}\vspace{1ex}
+
+    Let $\mymat{U} = \begin{bmatrix} \myvec{u}_1 & \myvec{u}_2 & \dots & \myvec{u}_n \end{bmatrix}$ be a $m \times n$ matrix with orthonormal columns \\
+    and let $\myvec{x}, \myvec{y} \in \mathbb{F}^n$
+    \begin{itemize}
+        \item $\|\mymat{U}\myvec{x}\| = \|\myvec{x}\|$ \quad (if $\mymat{U}$ is square, $|\det \mymat{U}| = 1$)
+        \item $(\mymat{U}\myvec{x}) \cdot (\mymat{U}\myvec{y}) = \myvec{x} \cdot \myvec{y} \quad (= \myvec{x}^T \mymat{U}^T \mymat{U} \myvec{y}) $
+        \item $\myvec{x} \cdot \myvec{y} = 0 \iff (\mymat{U}\myvec{x}) \cdot (\mymat{U}\myvec{y}) = 0$            
+    \end{itemize}
+    
+    \newpage
+    \subsubsection{Orthogonal Matrix}
+    \paragraph{Definition: } An orthogonal matrix is an invertible (square) matrix $\mymat{U}$ such that
+    \begin{equation}
+        \mymat{U}^{-1} = \mymat{U}^T
+    \end{equation}
+    or equivalently,
+    \begin{equation}
+        \mymat{U}^T \mymat{U} = \mymat{I}
+    \end{equation}
+    \paragraph{Notable Properties: }
+    \begin{itemize}
+        \item An orthogonal matrix \\ 
+            $\iff$ a square matrix with ortho\textbf{normal} columns \\
+            $\iff$ a square matrix with ortho\textbf{normal} rows \\
+            Proof: see subsubsection \ref{section3_5_3}
+        \item The determinant of an orthogonal matrix is always $\pm 1$ \\
+            Proof: 
+            \begin{quote}
+                Let $\mymat{U}$ be any orthogonal matrix, then $\det \mymat{U} \ne 0$,
+                \begin{align*}
+                    \mymat{U}^{-1} &= \mymat{U}^T \\
+                    \det(\mymat{U}^{-1}) &= \det(\mymat{U}^T) \\
+                    \frac{1}{\det\mymat{U}} &= \det \mymat{U} \\
+                    ( \det \mymat{U} )^2 &= 1 \\
+                    \Aboxed{\det \mymat{U} &= \pm 1}
+                \end{align*}
+            \end{quote}
+        \end{itemize}
+    Because of some historic reason, such a matrix is called an orthogonal matrix but not an orthonormal matrix, 
+    but an orthogonal matrix actually \textbf{requires} its set of column vectors (or set of row vectors) to be \textbf{orthogonal and normalized}.
+
+    \subsubsection{Similar Matrix}
+    A matrix $\mymat{A}$ is a symmetric matrix if 
+    \begin{equation}
+        \mymat{A}^T = \mymat{A}
+    \end{equation}
+    A symmetric matrix has its entries symmetric along the diagonal from top-left to bottom-right
+
+    \newpage
+    \subsubsection{Orthogonally Diagonalizable} \label{sec3_5_6}
+    \paragraph{Definition} An $n \times n$ matrix $\mymat{A}$ is \textbf{orthogonally diagonalizable} if there are an orthogonal matrix $\mymat{P}$ and a diagonal matrix $\mymat{D}$ such that
+    \begin{equation}
+        \mymat{A} = \mymat{P}\mymat{D}\mymat{P}^{T} = \mymat{P}\mymat{D}\mymat{P}^{-1}
+    \end{equation}
+    Similar to Orthogonal Matrix, the naming is a bit confusing. \\
+    A \textbf{orthogonally diagonalizable} matrix means that \\
+    \quad the matrix $\mymat{A}$ can be \textbf{diagonalized} by changing the basis into a \\
+    \quad set of \textbf{orthogonal and normalized}~basis~vector~(namely~ortho\textbf{normal}~basis)
+    Therefore, the transition matrix $\mymat{P}$ has to be \\
+    \quad an orthogonal matrix (with ortho\textbf{normal} columns) in \\
+    \quad order for matrix to be orthogonally diagonalizable
+
+    \paragraph{Properties} Let $\mymat{A}$ be a $n \times n$ orthogonally diagonalizable matrix
+    \begin{enumerate}
+        \item orthogonally diagonalizable matrix $\iff$ \textbf{symmetric} matrix ($\mymat{A}^T = \mymat{A}$)
+        \item $\mymat{A}$ has $n$ \textbf{real} eigenvalues (counting multiplicity)
+        \item for each eigenvalue $\lambda_k$, geometric multiplicity = counting multiplicity
+        \item eigenspaces of different eigenvalues are \textbf{orthogonal complements} of each other
+    \end{enumerate}
+
+    \paragraph{Proofs of Properties}
+    \noindent
+    \begin{minipage}{\textwidth}
+        1. orthogonally diagonalizable matrix $\iff$ \textbf{symmetric} matrix ($\mymat{A}^T = \mymat{A}$)    
+    \end{minipage} \vspace{2ex}
+
+    \noindent
+    \begin{minipage}{\textwidth}
+        4. eigenspaces of different eigenvalues are \textbf{orthogonal complements} of each other
+        \begin{quote}
+            Let $\lambda_1$ and $\lambda_2$ be two distinct eigenvalues of $\mymat{A}$ \\
+            and let $\myvec{v}_1$ and $\myvec{v}_2$ be the eigenvectors corresponds to $\lambda_1$ and $\lambda_2$ respectively
+            \begin{align*}
+                \lambda_1 \myvec{v}_1 \cdot \myvec{v}_2 &= (\lambda_1 \myvec{v}_1) \cdot \myvec{v}_2 \\
+                &= (\mymat{A} \myvec{v}_1) \cdot \myvec{v}_2 \\
+                &= (\mymat{A} \myvec{v}_1)^T \myvec{v}_2 & \myvec{u}_1 \cdot \myvec{u}_2 = \myvec{u}_1^T \myvec{u}_2 \text{ for all column vectors } \myvec{u}_1, \myvec{u}_2 \\
+                &= (\myvec{v}_1)^T \mymat{A}^T \myvec{v}_2 \\
+                &= (\myvec{v}_1)^T \mymat{A} \myvec{v}_2 & \mymat{A}^T = \mymat{A}\\
+                &= (\myvec{v}_1)^T (\lambda_2 \myvec{v}_2) \\
+                &= \lambda_2 (\myvec{v}_1)^T \myvec{v}_2 \\
+                \lambda_1 \myvec{v}_1 \cdot \myvec{v}_2 &= \lambda_2 \myvec{v}_1 \cdot \myvec{v}_2 \\
+                \mathrlap{(\lambda_1 - \lambda_2) \myvec{v}_1 \cdot \myvec{v}_2 = 0 } \phantom{\lambda_1 \myvec{v}_1 \cdot \myvec{v}_2}
+            \end{align*}
+            Since $\lambda_1 \ne \lambda_2$, we have $\myvec{v}_1 \cdot \myvec{v}_2 = 0$ \\ 
+            Therefore, for any two distinct eigenvalues of a symmetric matrix, the eigenvectors corresponds to each of them are perpendicular to each other
+        \end{quote}
+    \end{minipage}
+
+    \newpage
+    \subsubsection{Orthogonal Diagonalization of Symmetric Matrices}
+    \paragraph{Gram-Schmidt Orthogonalization Process}~\vspace{1ex}
+
+    The Gram-Schmidt Orthogonalization Process is a useful algorithmic procedure. \\
+    Take it briefly, given a set of basis vectors of any vector space $\mysubvecsp{V} \subseteq \mathbb{F}^n$,\\
+    \quad the process find a set of orthogonal (but not normalized) basis for $\mysubvecsp{V}$ \vspace{1ex}
+    
+    It is as follows:
+    \begin{quote}
+        Let $\{\myvec{w}_1, \myvec{w}_2, \dots, \myvec{w}_n\}$ be a basis for any vector space $\mysubvecsp{V} \subseteq \mathbb{F}^n$, then\\
+        the orthogonal basis $\{\myvec{v}_1, \myvec{v}_2, \dots, \myvec{v}_n\}$ for $\mysubvecsp{V}$ can be found as follows:
+        \begin{align*}
+            \myvec{v}_1 &= \myvec{w}_1 \\
+            \myvec{v}_2 &= \myvec{w}_2 - \frac{\langle \myvec{v}_1, \myvec{v}_2 \rangle}{\langle \myvec{v}_1, \myvec{v}_1 \rangle}\myvec{v}_1 \\
+            \myvec{v}_3 &= \myvec{w}_3 - \frac{\langle \myvec{v}_1, \myvec{v}_3 \rangle}{\langle \myvec{v}_1, \myvec{v}_1 \rangle}\myvec{v}_1 - \frac{\langle \myvec{v}_2, \myvec{v}_3 \rangle}{\langle \myvec{v}_2, \myvec{v}_2 \rangle}\myvec{v}_2 \\
+            \dots \\
+            \myvec{v}_n &= \myvec{w}_n - \sum_{k = 1}^{n-1} \frac{\langle \myvec{v}_k, \myvec{v}_n \rangle}{\langle \myvec{v}_k, \myvec{v}_k \rangle}\myvec{v}_k \\
+        \end{align*}
+    \end{quote}
+    The Gram-Schmidt Orthogonalization Process is useful in finding an orthogonal diagonalization.
+
+    \paragraph{Process of Orthogonal Diagonalization}~\vspace{1ex}
+
+    Given a $n \times n$ square matrix $\mymat{A}$, if we want to diagonalize it orthogonally, the steps are:
+    \begin{enumerate}
+        \item check if $\mymat{A}$ is orthogonally diagonalizable, i.e. a symmetric matrix
+        \item find all distinct eigenvalues $\lambda_1, \lambda_2, \dots, \lambda_m$ from $\det(\mymat{A} - \lambda\mymat{I}) = 0$
+        \item substitute all $\lambda_k$ one by one and solve the equation $\mymat{A}\myvec{x}_k=\lambda_k\myvec{x}_k$ for $\myvec{x}_k$
+        \item[-.] we should now have $\myvec{x}_1, \myvec{x}_2, \dots, \myvec{x}_m$, \\
+            some of them may have 1 free variable only, while others have more free variables    
+        \item if $\myvec{x}_k$ has only 1 free variable, because of property 4 mentioned in \ref{sec3_5_6}, it can directly be a vector in the orthogonal basis $\myvec{u}$\vspace{1ex} \\
+            if $\myvec{x}_k$ has more (num = $l$) free variables, get the basis vectors $\myvec{w}_1, \myvec{w}_2, \dots, \myvec{w}_l$ for the eigenspace of $\myvec{x}_k$, 
+            and then use the Gram-Sehmidt Orthogonalization Process to process the $\myvec{w}$s into orthogonal basis vectors $\myvec{u}_1, \myvec{u}_2, \dots, \myvec{u}_l$
+        \item[-.] grab all the $\myvec{u}$s from all the $\myvec{x}$s, there should be $n$ of them, they form the orthogonal eigenbasis
+        \item normalize all $\myvec{u}$s of the orthogonal eigenbasis into orthnormal eigenbasis $\{ \myvec{v}_1, \myvec{v}_2, \dots, \myvec{v}_n \}$
+        \item put the $\myvec{v}$s as columns into a matrix, this is the $\mymat{P}_{\myset{S}\leftarrow\myset{B}}$
+        \item put the eigenvalues $\lambda_1, \dots, \lambda_m$ in the same order as the vector $\myvec{v}$s (a $\lambda_k$ may corresponds to multiple $\myvec{v}$s, just put duplicated $\lambda$s as if u treat the duplicated $\lambda$s differently from the characteristic equation) into the diagonals into a $n \times n$ matrix, this is the diagonalized matrix $\mymat{D}$
+    \end{enumerate}
+    
+
+    
 \end{document}
