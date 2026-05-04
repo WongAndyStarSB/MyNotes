@@ -1,0 +1,45 @@
+\documentclass[11pt]{article}
+
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{array}
+\usepackage{bm}
+\usepackage{esvect}
+\usepackage{geometry}
+\usepackage{makecell}
+\usepackage{mathtools}
+\usepackage{siunitx}
+
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+
+\geometry{margin=1in}
+
+\DeclareRobustCommand{\myvec}[1]{\vv{\mathbf{#1}}}
+\newcommand{\myunitvec}[1]{\bm{\hat{\mathbf{#1}}}}
+\newcommand{\myvecsp}[1]{\bm{\mathcal{#1}}}
+\newcommand{\mysubvecsp}[1]{\bm{{#1}}}
+\newcommand{\myset}[1]{\mathcal{#1}}
+\newcommand{\mymat}[1]{#1}
+\newcommand{\dotprod}[2]{#1 \cdot #2}
+\newcommand{\innerprod}[2]{\left\langle #1, #2\right\rangle}
+
+\raggedright
+\begin{document}
+    \subsubsection*{Gram-Schmidt Orthogonalization Process}
+    \begin{quote}
+        Let $\{\myvec{w}_1, \myvec{w}_2, \dots, \myvec{w}_n\}$ be a basis for any vector space $\mysubvecsp{V} \subseteq \mathbb{R}^n$, then\\
+        the orthogonal basis $\{\myvec{v}_1, \myvec{v}_2, \dots, \myvec{v}_n\}$ for $\mysubvecsp{V}$ can be found as follows:
+    
+        \begin{align*}
+            \myvec{v}_1 &= \myvec{w}_1 \\
+            \myvec{v}_2 &= \myvec{w}_2 - \frac{\dotprod{\myvec{v}_1}{\myvec{w}_2}}{\dotprod{\myvec{v}_1}{\myvec{v}_1}}\myvec{v}_1 \\
+            \myvec{v}_3 &= \myvec{w}_3 - \frac{\dotprod{\myvec{v}_1}{\myvec{w}_3}}{\dotprod{\myvec{v}_1}{\myvec{v}_1}}\myvec{v}_1 - \frac{\dotprod{\myvec{v}_2}{\myvec{w}_3}}{\dotprod{\myvec{v}_2}{\myvec{v}_2}}\myvec{v}_2 \\
+            \dots \\
+            \myvec{v}_n &= \myvec{w}_n - \sum_{k = 1}^{n-1} \frac{\dotprod{\myvec{v}_k}{\myvec{w}_n}}{\dotprod{\myvec{v}_k}{\myvec{v}_k}}\myvec{v}_k \\
+        \end{align*}
+    \end{quote}
+    \subsubsection*{Diagonalization}
+    \[ \mymat{D} = \mymat{P}^{-1}\mymat{A}\mymat{P} \qquad \mymat{A} = \mymat{P}\mymat{D}\mymat{P}^{-1} \]
+    
+\end{document}

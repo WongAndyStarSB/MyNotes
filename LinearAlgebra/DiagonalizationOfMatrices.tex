@@ -1,0 +1,738 @@
+\documentclass[11pt]{article}
+
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{array}
+\usepackage{bm}
+\usepackage{esvect}
+\usepackage{geometry}
+\usepackage{makecell}
+\usepackage{mathtools}
+\usepackage{siunitx}
+
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+
+\geometry{margin=1in}
+
+\DeclareRobustCommand{\myvec}[1]{\vv{\mathbf{#1}}}
+\newcommand{\myunitvec}[1]{\bm{\hat{\mathbf{#1}}}}
+\newcommand{\myvecsp}[1]{\bm{\mathcal{#1}}}
+\newcommand{\mysubvecsp}[1]{\bm{{#1}}}
+\newcommand{\myset}[1]{\mathcal{#1}}
+\newcommand{\mymat}[1]{#1}
+\newcommand{\dotprod}[2]{#1 \cdot #2}
+\newcommand{\innerprod}[2]{\left\langle #1, #2\right\rangle}
+
+\title{Diagonalization of Matrices}
+\author{\texttt{O5-37-2718281828459}}
+
+\raggedright
+\begin{document}
+
+    \maketitle
+
+    \newpage
+    \vspace*{\fill}
+    \begin{center}
+        \LARGE
+        \fontfamily{qzc}\selectfont\itshape
+        The people who seek the truth are more important than the truth itself \\
+    \end{center}
+    {
+        \Large
+        \rightline{--- \emph{6, Reverse 1999}}
+    }
+    \vspace*{\fill}
+
+    \newpage
+    \tableofcontents
+    
+    \newpage
+    \setcounter{section}{-1}
+    \section{Preliminaries}
+    \subsection{The Scalar Field}
+    Unless otherwise specified:
+    \begin{itemize}
+        \item All matrices in this notes are real matrices
+        \item All vectors are real
+        \item All vector spaces are $\subseteq \mathbb{R}^n$
+    \end{itemize}
+
+    \subsection{Coordinate Spaces}
+    We distinguish between an abstract subspace $V$ and the entire $n$-dimensional coordinate universe:
+    \begin{itemize}
+        \item $\mathbb{R}^n$ represents the \textbf{entire vector space} (the domain and codomain of our transformations).
+        \item $\mysubvecsp{V}, \mysubvecsp{E}, \dots$ is used to denote an arbitrary subspace or a solution set (such as an eigenspace) within $\mathbb{R}^n$.
+    \end{itemize}
+
+    \newpage
+    \section{Change of Basis}
+    \subsection*{Quick Review: From Axioms to Coordinates}
+    Let $\mysubvecsp{V}$ be a vector space and $\myset{B}$ be any basis for $\mysubvecsp{V}$
+    \begin{itemize}
+        \item \textbf{Basis Uniqueness:} For any $\myvec{v} \in \mysubvecsp{V}$, the coordinate vector $[\myvec{v}]_\myset{B}$ is unique.
+        \item \textbf{Origin Invariance:} All coordinate systems in $\mysubvecsp{V}$ share the same $\myvec{0}$ vector.
+        \item \textbf{Linearity:} The transition between $[\myvec{v}]_{\mathcal{B}_1}$ and $[\myvec{v}]_{\mathcal{B}_2}$ is a \textit{linear transformation}.
+    \end{itemize}
+    \subsection{Core Requirement: Shared Vector Space}
+    For the change of basis $[x]_\myset{B} \to [x]_\myset{C}$ to be valid, both sets must be bases for the \textbf{same underlying vector space} $\mysubvecsp{V}$.
+    \begin{equation}
+        \myset{B}, \myset{C} \subset \mysubvecsp{V} \quad \text{and} \quad \operatorname{Span}(\myset{B}) = \operatorname{Span}(\myset{C}) = \mysubvecsp{V}
+    \end{equation}
+    This ensures that every vector $\myvec{v} \in \mysubvecsp{V}$ has a unique representation in both coordinate systems.
+    \subsection{The Transition Matrix}
+    Since change of basis is a linear transformation, it can be expressed using a matrix
+    \begin{quote}
+        Note: in the later parts, we will use the following notations: \vspace{\abovedisplayshortskip}
+
+        \begin{tabular}{l l @{}}
+            $\myvec{v}$ & a vector v in space, in standard basis, or independent on any basis \\[1ex]
+            $v_k$ & the k-th component of $\myvec{v}$ \\[1ex]
+            $[\myvec{v}]_\myset{B}$ & the vector $\myvec{v}$ expressed in a basis $\myset{B}$ \\[1ex]
+            $(v_\myset{B})_k$ & the k-th component of $[\myvec{v}]_\myset{B}$ \\[1ex]
+            $\mymat{P}_{\myset{B}_2\leftarrow\myset{B}_1}$ & a transition matrix $\mymat{P}$ that translates a vector from basis $\myset{B}_1$ to basis $\myset{B}_2$
+        \end{tabular}
+    \end{quote}
+    \subsubsection{Transit From Standard Basis}
+    Let $\myset{S}$ be the \textbf{standard basis} of $\mathbb{R}^n$, $\myset{B} = \{\myvec{b}_1, \dots, \myvec{b}_n\}$ be a basis for $\mathbb{R}^n$, and $\myvec{v} \in \mathbb{R}^n$\\
+    if we want to find $[\myvec{v}]_\myset{S}$ from $[\myvec{v}]_\myset{B}$, we have
+    \begin{align*}
+    \myvec{v} = [\myvec{v}]_{\myset{S}} = {(v_\myset{B})}_1\myvec{b}_1 + {(v_\myset{B})}_2\myvec{b}_2 + \dots + {(v_\myset{B})}_n\myvec{b}_n 
+        & = \bigg[ \myvec{b}_1 \, \myvec{b}_2 \, \dots \, \myvec{b}_n \bigg] 
+        \begin{bmatrix} {(v_\myset{B})}_1 \\ {(v_\myset{B})}_2 \\ \vdots \\ {(v_\myset{B})}_n \end{bmatrix} \\
+        & = \bigg[ \myvec{b}_1 \, \myvec{b}_2 \, \dots \, \myvec{b}_n \bigg]\,[\myvec{v}]_\myset{B}
+    \end{align*}
+    Therefore, the transition matrix that translate vectors in basis $\myset{B}$ to standard basis $\myset{S}$, is given by,
+    \begin{equation}
+        \mymat{P}_{\myset{S}\leftarrow\myset{B}} = \bigg[ \myvec{b}_1 \, \myvec{b}_2 \, \dots \, \myvec{b}_n \bigg]
+    \end{equation} 
+    and to find expression in $\myset{S}$ of a vector expressed in basis $\myset{B}$, we have:
+    \begin{equation}
+        \myvec{v} = [\myvec{v}]_{\myset{S}} = \mymat{P}_{\myset{S}\leftarrow\myset{B}} \, [\myvec{v}]_{\myset{B}}
+    \end{equation}
+        
+    \subsubsection{General Formula for Transiting in Two Basis}
+
+    Let $\myset{B} = \{\myvec{b}_1, \dots, \myvec{b}_n\}$ and $\myset{C}$ be two bases for $\mysubvecsp{V}$.
+    To find the coordinate vector $[\myvec{v}]_{\myset{C}}$ from $[\myvec{v}]_{\myset{B}}$, we use the transition matrix $\mymat{P}_{\myset{C} \leftarrow \myset{B}}$:
+
+    \begin{equation}
+        [\myvec{v}]_{\myset{C}} = \mymat{P}_{\myset{C} \leftarrow \myset{B}}\,[\myvec{v}]_{\myset{B}}
+    \end{equation}
+
+    The columns of this matrix are the coordinate vectors of the basis $\myset{B}$ relative to the basis $\myset{C}$:
+
+    \begin{equation}
+        \mymat{P}_{\myset{C} \leftarrow \myset{B}} = 
+        \begin{bmatrix} 
+            [\myvec{b}_1]_{\myset{C}} & [\myvec{b}_2]_{\myset{C}} & \dots & [\myvec{b}_n]_{\myset{C}} 
+        \end{bmatrix}
+    \end{equation}
+
+    This matrix essentially "encodes" how to map the unit steps of the first grid onto the second grid.
+
+    \newpage
+    \subsection{Change of Basis for a Linear Transformation}
+    
+    Think of an example, in 2d, in the standard basis, if we want to rotate our plane anti-clockwise by $\pi/2$ (or $\ang{90}$), we use a rotation matrix $\mymat{R}$:
+    \[ \mymat{R} = \begin{bmatrix}
+        0 & -1 \\
+        1 & 0
+    \end{bmatrix} \]
+    what if we want a matrix of transformation of "anti-clockwise $\pi/2$ rotation" that applicable on vectors in another basis $\myset{B}$?\\
+    or in other words, what is $[\mymat{R}]_\myset{B}$?
+    \vspace{\belowdisplayskip}
+
+    \subsubsection{Transitioning from the Standard Basis}
+
+    Let $[\myvec{u}]_{\myset{B}}$ be a vector expressed in basis $\myset{B}$\\
+    we want to find $[\myvec{v}]_{\myset{B}}$, \\
+    \quad the resultant vector after any linear transformation $\mymat{L}$, expressed in basis $\myset{B}$ \vspace{\belowdisplayshortskip}
+
+    Since we don't know how to do the transformation directly in basis $\myset{B}$, we \\
+    \begin{quote}
+        first, transit it into standard basis
+        \[ \myvec{u} = \mymat{P}_{\myset{S}\leftarrow\myset{B}}\,[\myvec{u}]_{\myset{B}} \]
+        then, we do the transformation to the vector, in our familiar standard basis,
+        \[ \myvec{v} = \mymat{L}\myvec{u} \]
+        afterall, we transit it back to expressing in basis $\myset{B}$ \\
+        \[ [\myvec{v}]_{\myset{B}} = \mymat{P}_{\myset{B}\leftarrow{S}} \myvec{v} \qquad \text{where } \mymat{P}_{\myset{B}\leftarrow{S}} = (\mymat{P}_{\myset{S}\leftarrow{B}})^{-1}\]
+    \end{quote}
+    Therefore, given a transition matrix $\mymat{P} = \mymat{P}_{\myset{S}\leftarrow\myset{B}}$ \\
+    for any linear transformation $\mymat{L} = [\mymat{L}]_{\myset{S}}$,\\ 
+    the equation to find $[\myvec{v}]_{\myset{B}}$ from $[\myvec{u}]_{\myset{B}}$:
+    \begin{equation}
+        [\myvec{v}]_{\myset{B}} = \mymat{P}^{-1} \mymat{L} \mymat{P} [\myvec{u}]_{\myset{B}}
+    \end{equation}
+
+    Therefore, we have the formula for $[\mymat{L}]_{\myset{B}}$:
+    \begin{equation}
+        [\mymat{L}]_{\myset{B}} = \mymat{P}^{-1} \mymat{L} \mymat{P}
+    \end{equation}
+
+    \subsubsection{General Formula}
+    For any linear transformation $[\mymat{L}]_{\myset{B}}$ in basis $\myset{B}$, \\
+    the same transformation that applicable on vectors in basis $\myset{C}$, $[\mymat{L}]_{\myset{C}}$, is given by
+    \begin{equation}
+        [\mymat{L}]_{\myset{C}} = \mymat{P}_{\myset{C}\leftarrow\myset{B}} \cdot [\mymat{L}]_{\myset{B}} \cdot \mymat{P}_{\myset{B}\leftarrow\myset{C}}
+    \end{equation}
+    
+    \newpage
+    \section{Eigenvectors}
+
+    \subsection{Definitions}
+    \subsubsection{Eigenvectors and Eigenvalues}
+    \textbf{Eigenvector} (or characteristic vector) is a non-zero vector that \\
+    has its direction un\large \textbf{changed} (or reversed, or shrunk into a point) in a linear transformation
+    \vspace{\belowdisplayshortskip}
+
+    More precisely, an eigenvector $\myvec{v}$ of a linear transformation $\mymat{A}$ is scaled by a constant factor $\lambda$ when the linear transformation is applied to it
+    \vspace{\belowdisplayshortskip}
+
+    \noindent
+    \begin{minipage}{\linewidth}
+        An eigenvector $\myvec{v}$ suits the following equation
+        \begin{equation}
+            \mymat{A}\myvec{v} = \lambda\myvec{v}, \qquad \myvec{v} \ne \myvec{0}
+        \end{equation} 
+        \begin{tabbing}
+            where \= $\mymat{A}$ is any linear transformation, and\\
+            \> the scalar $\lambda$ is the \textbf{eigenvalue} (or characteristic value) of $\mymat{A}$ 
+        \end{tabbing}
+    \end{minipage}
+    \hbox{}
+
+    \noindent \rule{\textwidth}{0.1pt} 
+    if we have
+    \[ \mymat{A}\,\myvec{x}_1 = \lambda_1 \myvec{x}_1, \qquad \myvec{x}_1 \ne \myvec{0} \]
+    \begin{center}
+        where $\lambda_1$ is one of the eigenvalues
+    \end{center}
+    then, $\myvec{x}_1$ is called the eigenvector(s) of $\mymat{A}$ corresponds to $\lambda_1$\\
+    the solution set for $\myvec{x}_1$, plus the zero vector, is called the eigenspace of $\lambda_1$, denoted by $\mysubvecsp{E}_{\lambda_1}$
+    \noindent \rule{\textwidth}{0.1pt} 
+
+    \subsubsection{Eigenspace}
+    For a given eigenvalue $\lambda_k$, the \textbf{eigenspace} $\mysubvecsp{E}_{\lambda_k}$ is a vector space, it is the set of all eigenvectors corresponding to $\lambda_k$, plus the zero vector.
+    \begin{equation}
+        \mysubvecsp{E}_{\lambda_k} = \{ \myvec{v} \mid \mymat{A}\myvec{v} = \lambda_k\myvec{v} \} = \operatorname{null}(\mymat{A}-\lambda_k \mymat{I})
+    \end{equation}
+
+    \newpage
+    \subsection{Characteristic Equation}
+    The characteristic equation is an equation that is very useful for \\
+    finding eigenvalues (and other eigen-related infos) for a square matrix $\mymat{A}$
+    \begin{equation}
+        \det(\mymat{A}-\lambda \mymat{I}) = 0
+    \end{equation}
+
+    \subsubsection{Derivation}
+    \begin{align*}
+        \mymat{A}\myvec{v} &= \lambda \myvec{v}\\
+        \mymat{A}\myvec{v} - \lambda \myvec{v} &= \myvec{0}\\
+        (\mymat{A} - \lambda \mymat{I})\myvec{v} &= \myvec{0}
+    \end{align*}
+    This is a homogeneous linear system\\
+    \begin{quote}
+        for a homogeneous linear system $\mymat{A}\myvec{x} = \myvec{0}$, \\
+        \quad if $\det\mymat{A}\ne0$ \quad there are only the trivial solution ($\myvec{x} = \myvec{0}$) \\
+        \quad if $\det\mymat{A}=0$ \quad there are infinite many solutions for $\myvec{x}$
+    \end{quote}
+
+    since eigenvectors are non-zero vectors, \\
+    we want to find the solution $\myvec{v} \ne \myvec{0}$ for $(\mymat{A} - \lambda \mymat{I})\myvec{v} = \myvec{0}$,\\
+    $\therefore$ we look for \fbox{$\det(\mymat{A} - \lambda \mymat{I}) = 0$} \quad (infinite many solutions)\\
+    and this is our \textbf{characteristic equation}
+
+
+    \newpage
+    \subsection{Notable Properties}
+
+    \subsubsection{Number of Eigenvalues and Dimensions of Eigenspaces}
+    Let $\mymat{A}$ be any real $n \times n$ matrix.
+    \begin{itemize}
+        \item \textbf{Number of Eigenvalues:} \vspace{1ex} \\
+            There are always $n$ eigenvalues when counting \textbf{algebraic multiplicities}. Let them be $\lambda_1, \lambda_2, \dots, \lambda_n$.
+            \begin{enumerate}
+                \item They can be duplicated (i.e.: $\lambda_i = \lambda_j$).
+                \item They can be complex (i.e.: $\lambda = a + bi$).
+            \end{enumerate} \vspace{1ex}
+            If we restrict our count to \textbf{distinct} and \textbf{real} eigenvalues:
+            \begin{enumerate}
+                \item $\mymat{A}$ may have \textbf{no} real eigenvalues (the spectrum is purely complex).
+                \item The number of real eigenvalues $m$ ranges from $0 \le m \le n$.
+            \end{enumerate}
+
+        \item \textbf{Dimension of Eigenspaces:} \vspace{1ex} \\
+            Let $m$ be the number of \textbf{distinct real} eigenvalues $\lambda_1, \dots, \lambda_m$ with corresponding eigenspaces $\mysubvecsp{E}_{\lambda_1}, \dots, \mysubvecsp{E}_{\lambda_m}$.
+            \begin{itemize}
+                \item \textbf{Real:} $\mysubvecsp{E}_{\lambda_k} \subset \mathbb{R}^n$ for all real $\lambda_k$.
+                \item \textbf{Disjointness:} Eigenspaces only intersect at the zero vector:
+                \begin{equation}
+                    \mysubvecsp{E}_{\lambda_i} \cap \mysubvecsp{E}_{\lambda_j} = \{\myvec{0}\} \quad \forall\,i \ne j
+                \end{equation}
+                \item \textbf{Multiplicity Constraint:} For each $\lambda_k$, the \textbf{geometric multiplicity} ($\dim \mysubvecsp{E}_{\lambda_k}$) satisfies:
+                \begin{equation}
+                    1 \le \dim \mysubvecsp{E}_{\lambda_k} \le (\text{Algebraic Multiplicity of } \lambda_k)
+                \end{equation}
+                \item \textbf{Total Dimension:} The sum of dimensions $\sum_{k=1}^m \dim \mysubvecsp{E}_{\lambda_k}$ ranges from $m$ to $n$.
+                \item \textbf{Full Coverage:} We have: total dimension $ = n$ if $m = n$. \\ 
+                    \begin{quote}
+                        This implies that the direct sum of all $\mysubvecsp{E}_{\lambda}$ covers $\mathbb{R}^n$ when we have all $\lambda_k$ being distinct. \\
+                        This explains why having all distinct real eigenvalues is a sufficient (but not necessary) condition for a square matrix to be \textbf{diagonalizable}, which we will cover in later chapters.
+                    \end{quote}
+            \end{itemize}
+    \end{itemize}
+    
+    \newpage
+    \subsubsection{Eigenvalue of Inverse Matrix}
+    If $\mymat{A}^{-1}$ exists, the eigenvalues of $\mymat{A}^{-1}$ are the reciprocal of eigenvalues of $\mymat{A}$\\
+    
+    derivation: Assume $\mymat{A}$ is invertable, let $\lambda$ and $\lambda'$ be the eigenvalues of $\mymat{A}$ and $\mymat{A}^{-1}$ respectively\\
+    Note that $\lambda \ne 0$ is always true when $\mymat{A}$ is invertible (think of the characteristic equation)
+    \begin{align*}
+        \mymat{A}\myvec{v} &= \lambda\myvec{v} \\
+        \mymat{A}^{-1} \mymat{A} \myvec{v} &= \mymat{A}^{-1} (\lambda \myvec{v}) \\
+        \myvec{v} &= \lambda \mymat{A}^{-1} \myvec{v} & \mymat{L}(k\myvec{v}) = k\mymat{L}(\myvec{v}) \text{ for any lin. transf. function }\mymat{L}\\
+        (1/\lambda)\myvec{v} &= \mymat{A}^{-1} \myvec{v}\\
+        \lambda' &= 1/\lambda & \text{by definition of eigenvalue}
+    \end{align*}
+    \subsubsection{Product and Sum of Eigenvalues}
+    \paragraph{The Determinant Property}~\\
+    for any $n \times n$ square matrix $\mymat{A}$ with eigenvalues $\lambda_1, \lambda_2, \dots, \lambda_n$
+    \begin{equation}
+        \prod_{k=1}^{n} \lambda_k = \det \mymat{A}
+    \end{equation}
+
+    \paragraph{Proof of, $\prod_{k=1}^{n} \lambda_k = \det \mymat{A}$}~\vspace{1ex}\\
+    Let $\mymat{A}$ be any $n \times n$ square matrix with eigenvalues $\lambda_1, \lambda_2, \dots, \lambda_n$ \\
+    Let polynomial $P(\lambda) = \det(\mymat{A} - \lambda\mymat{I})$ \vspace{1ex}\\
+    
+    Since, the term $\lambda^n$ in $\det(\mymat{A} - \lambda\mymat{I})$ can only be produced from the main diagonal of $\mymat{A}$, \\
+    the term of $\lambda^n$ in $P(\lambda)$ is $(-1)^n\lambda^n$ \vspace{1ex} \\
+
+    By Fundamental Theorem of Algebra, \\
+    $ P(\lambda) = (-1)^n(\lambda - \lambda_1)(\lambda - \lambda_2)\dots(\lambda - \lambda_n)$ \vspace{1ex} \\
+
+    Since $P(\lambda) = \det(\mymat{A} - \lambda\mymat{I})$ for any $\lambda$, we can substitute $\lambda = 0$, \vspace{1ex} \\
+    $P(0) = \det\mymat{A}$ \vspace*{-\abovedisplayskip}
+    \begin{flalign*}
+        (-1)^n( - \lambda_1)( - \lambda_2)\dots( - \lambda_n) &= \det\mymat{A} &\\
+        (-1)^n (-1)^n(\lambda_1 \lambda_2 \dots \lambda_n) &= \det\mymat{A} &\\
+        (\lambda_1 \lambda_2 \dots \lambda_n) &= \det\mymat{A} &\\
+        \Aboxed{ \prod_{k = 1}^{n} \lambda_k &= \det\mymat{A} }
+    \end{flalign*}
+    \newpage
+    
+    \paragraph{The Trace Property}~\\
+    for any $n \times n$ square matrix $\mymat{A}$ with eigenvalues $\lambda_1, \lambda_2, \dots, \lambda_n$
+    \begin{equation}
+        \sum_{k=1}^{n} \lambda_k = \operatorname{tr}(\mymat{A})
+    \end{equation}
+    where $\operatorname{tr}(\mymat{A})$ is the trace of $\mymat{A}$, which equals to $\sum_{i=1}^{n}a_{ii}$ , the sum of main elements at the diagonal of $\mymat{A}$ 
+    
+    \paragraph{Proof of, $\sum_{k=1}^{n} \lambda_k = \operatorname{tr}(\mymat{A})$}~\vspace{1ex}\\
+    Let $\mymat{A}$ be any $n \times n$ square matrix with eigenvalues $\lambda_1, \lambda_2, \dots, \lambda_n$ \\
+    Let polynomial $P(\lambda) = \det(\mymat{A} - \lambda\mymat{I})$ 
+    \begin{enumerate}
+        \item Same as above, $P(\lambda) = (-1)^n(\lambda - \lambda_1)(\lambda - \lambda_2)\dots(\lambda - \lambda_n)$, \\ 
+            notice that:
+            \begin{quote}
+                coefficient of $\lambda^n = (-1)^n$ \\
+                coefficient of $\lambda^{n-1} = (-1)^n (-\lambda_1-\lambda_2-\dots-\lambda_n) = (-1)^{n+1} \sum_{k=1}^{n}\lambda_k$
+            \end{quote}
+        \item Observe the calculation of $\det(\mymat{A}-\lambda\mymat{I})$, \\
+            notice that, the terms of $\lambda^n$ and $\lambda^{n-1}$ comes out only from the main diagonal:
+            \[ (a_{11} - \lambda)(a_{22} - \lambda)\dots(a_{nn} - \lambda) \]
+            so, 
+            \begin{quote}
+                coefficient of $\lambda^n = (-1)^n$ \\
+                coefficient of $\lambda^{n-1} = (-1)^n (-a_{11}-a_{22}-\dots-a_{nn}) = (-1)^{n+1} \sum_{k=1}^{n}a_{kk}$
+            \end{quote}
+    \end{enumerate}
+    Therefore, we have 
+    \begin{gather*}
+        (-1)^{n+1} \sum_{k=1}^{n}\lambda_k = \text{ coefficient of }\lambda^{n-1} = (-1)^{n+1} \sum_{k=1}^{n}a_{kk} \\
+        \sum_{k=1}^{n}\lambda_k = \sum_{k=1}^{n}a_{kk} \\
+        \boxed{\sum_{k=1}^{n}\lambda_k = \operatorname{tr}(\mymat{A})}
+    \end{gather*}
+    
+    
+    
+    
+
+    \newpage
+    \section{Diagonalization}
+    \subsection{Diagonalizable Matrices}
+    For a $n \times n$ square matrix $\mymat{A}$ that has $m$ distinct eigenvalues $\lambda_1, \lambda_2, \dots, \lambda_m$ to be \textbf{diagonalizable}, the total dimension of its eigenspaces spans the entire vector space
+    \begin{equation}
+        \mymat{E}_{\lambda_1} \oplus \mymat{E}_{\lambda_2} \oplus \dots \oplus \mymat{E}_{\lambda_m} = \mathbb{R}^n
+    \end{equation}
+    In practical calculation, this means the sum of the \textbf{geometric multiplicities} must equal the order of the matrix:
+    \begin{equation}
+        \sum_{k=1}^{m} \dim(\mysubvecsp{E}_{\lambda_k}) = n
+    \end{equation}
+    Property: \\
+    if a square matrix has all the $n$ eigenvalues being distinct $\implies$ it is diagonalizable
+
+    \subsection{Eigenbasis}
+    For a \textbf{diagonalizable} matrix $\mymat{A}$ that has distinct eigenvalues $\lambda_1, \lambda_2, \dots, \lambda_m$, \\
+    \textbf{eigenbasis} is a basis $\myset{B} = \myvec{b}_1, \myvec{b}_2, \dots, \myvec{b}_n$ for the entire vector space
+    \[ \operatorname{Span}(\myset{B}) = \mathbb{R}^n \]
+    In other words, when the matrix is diagonalizable, the union of the bases of all its eigenspaces forms 
+    an eigenbasis for the whole underlying vector space $\mathbb{R}^n$
+    
+    \subsection{The Diagonalization Process}
+    Just as the name implies, applying a \textbf{diagonalization} on a diagonalizable matrix produces a \textbf{diagonal matrix}.
+    It works as follows.
+    
+    \subsubsection{The way for a Matrix to record a Linear Transformation}
+    Under $\mathbb{R}^n$, using the basis $\myset{B} = \{ \myvec{b}_1, \myvec{b}_2, \dots, \myvec{b}_n \}$ \vspace{1ex}
+
+    Let $\mymat{A}$ be a $m \times n$ matrix and $L$ be a linear transformation function such that
+    \[ \mymat{L}(\myvec{x}) = \mymat{A}\myvec{x} \qquad \text{ for any }n \times 1\text{ column vector }\myvec{x} \]
+    
+    The Matrix $\mymat{A}$ records $\mymat{L}$ by tracking how a set of vectors that equals to the basis vectors being transformed \textbf{relatively} to the basis vectors \\
+    
+    \begin{equation}
+        \mymat{A} = \bigg[ \big[\mymat{L}(\myvec{b}_1)\big]_{\myset{B}} \, \big[\mymat{L}(\myvec{b}_2)\big]_{\myset{B}} \, \dots \, \big[\mymat{L}(\myvec{b}_n)\big]_{\myset{B}} \bigg]
+    \end{equation}
+    if $m \ne n$, then the $\mymat{L}$ is a transformation from $\mathbb{R}^n$ to $\mathbb{R}^m$\\
+    if $m = n$, then, $\mymat{L}$ is a trasformation within the same dimension of $\mathbb{R}$
+    \vspace{1ex}
+
+    In diagonalization, we need a matrix that has eigenvectors, so let us focus on the $m = n$~case, where we have a $n \times n$~matrix~$\mymat{A}$
+
+    \begin{minipage}{\textwidth}
+        \subsubsection{Diagonalization}
+        Let $\mymat{A}$ be a $n \times n$ square matrix, and $\mymat{L}$ be the linear transformation function of $\mymat{A}$ 
+        \vspace{2ex}
+
+        If we use the standard basis $\myset{S} = \{ \myvec{s}_1, \myvec{s}_2, \dots, \myvec{s}_n \}$ to express the $\mymat{L}$, in matrix, we have 
+        \vspace{1ex}
+    
+        $[\mymat{L}(\myvec{s})]_\myset{S}$ means "how standard basis vector changes in $\mymat{L}$, relative to themselves"
+        \vspace{2ex}
+        
+        Let's see how it becomes if we switch our basis from $\myset{S}$ to the \\
+        set of eigenvectors, denote with $\myset{E} = \{ \myvec{e}_1, \myvec{e}_2, \dots, \myvec{e}_n \}$ 
+        \vspace{1ex}
+    
+        $[\mymat{L}(\myvec{e})]_\myset{E}$ means "how eigenvector changes in $\mymat{L}$, relative to themselves", so...
+      
+        \[ [\mymat{L}(\myvec{e}_k)]_\myset{E} = \lambda_k [\myvec{e}_k]_{\myset{E}} = \lambda_k\,\myvec{\mymat{I}_k} \qquad \text{ where $\myvec{\mymat{I}_k}$ is the k-th column of the Identity Matrix }\]
+        Therefore, 
+        \begin{equation*}
+            \mymat{D} = [\mymat{A}]_{\myset{E}} = \Big[ [\mymat{L}(\myvec{e}_1)]_\myset{E}\,[\mymat{L}(\myvec{e}_2)]_\myset{E}\,\dots\,[\mymat{L}(\myvec{e}_n)]_\myset{E} \Big] = \Big[ \lambda_1\myvec{\mymat{I}_1}\,\lambda_2\myvec{\mymat{I}_2}\,\dots\,\lambda_n\myvec{\mymat{I}_n} \Big]
+        \end{equation*}
+        $\mymat{D}$ is called the diagonalized matrix of $\mymat{A}$, by recalling Change of Basis, we have
+        \begin{equation}
+            \mymat{D} = \mymat{P}^{-1} \mymat{A} \mymat{P} \qquad \text{ where }\mymat{P} = \mymat{P}_{\myset{S}\leftarrow\myset{E}} = \Big[ \myvec{e}_1\,\myvec{e}_2\,\dots\,\myvec{e}_n \Big]
+        \end{equation}
+    \end{minipage}
+    
+    \subsection{Similar Matrices}
+    A square matrix $\mymat{A}$ is diagonalizable if it is \textbf{similar} to a diagonal matrix $\mymat{D}$.
+    This relationship is expressed through the factorization:
+    \begin{equation}
+        \mymat{A} = \mymat{P}\mymat{D}\mymat{P}^{-1}
+    \end{equation}
+    In other words, if $\mymat{D}$ is the diagonal matrix of $\mymat{A}$, $\mymat{A}$ and $\mymat{D}$ are \textbf{similar matrices} 
+    \paragraph{Components of the Factorization:}
+    \begin{itemize}
+        \item $\mymat{D}$ is the \textbf{diagonal matrix} containing the eigenvalues $\lambda_1, \dots, \lambda_n$ along its main diagonal.
+        \item $\mymat{P}$ is the \textbf{modal matrix} (or transition matrix), whose columns are the linearly independent eigenvectors $\myvec{b}_1, \dots, \myvec{b}_n$ that form the eigenbasis $\myset{B}$.
+        \item $\mymat{P}^{-1}$ transforms vectors from the standard basis into the eigenbasis coordinates.
+    \end{itemize}
+
+    \paragraph{Geometric Interpretation:}
+    The equation $\mymat{A} = \mymat{P}\mymat{D}\mymat{P}^{-1}$ represents a three-step process:
+    \begin{enumerate}
+        \item $\mymat{P}^{-1}$ changes the coordinate system of the input vector to the eigenbasis.
+        \item $\mymat{D}$ performs a simple scaling (stretching/shrinking) along the axes of the eigenbasis.
+        \item $\mymat{P}$ changes the resulting vector back to the standard basis.
+    \end{enumerate}
+
+    \subsection{Application: Computing Matrix Power}
+    Diagonalization can optimize the computation of Matrix Power (from $\operatorname{O}(\log m)$ to $\operatorname{O}(1)$ matrix multiplications) \vspace{1ex} \\
+    After we find the diagonalized matrix $\mymat{D}$ for a square matrix $\mymat{A}$, we have
+    \begin{equation*}
+        \mymat{D} = \mymat{P}^{-1} \mymat{A} \mymat{P} \quad\text{ or }\quad \mymat{A} = \mymat{P} \mymat{D} \mymat{P}^{-1}
+    \end{equation*}
+    Let us see what can we do to simplify the calculation of $\mymat{A}^m$
+    \begin{align*}
+        \mymat{A}^m &= (\mymat{P} \mymat{D} \mymat{P}^{-1})^m \\
+        &= \overbrace{\mymat{P} \mymat{D} \mymat{P}^{-1}\,\mymat{P} \mymat{D} \mymat{P}^{-1}\,\dots\,\mymat{P} \mymat{D} \mymat{P}^{-1}}^{m\text{ times}} \\
+        &= \mymat{P} \mymat{D} (\mymat{P}^{-1}\mymat{P}) \mymat{D} (\mymat{P}^{-1} \dots \mymat{P})\mymat{D}\mymat{P}^{-1} \\
+        &= \mymat{P} \mymat{D}^m \mymat{P}^{-1}
+    \end{align*}
+    $\because$ for any diagonal matrix $\mymat{D} = \begin{bmatrix}
+            d_{11}  & 0         & \dots     & 0 \\
+            0       & d_{22}    & \dots     & 0 \\
+            \vdots  & \vdots    & \ddots    & \vdots \\
+            0       & 0         & \dots     & d_{nn}
+        \end{bmatrix}$, $\mymat{D}^m = \begin{bmatrix}
+            (d_{11})^m  & 0             & \dots     & 0 \\
+            0           & (d_{22})^m    & \dots     & 0 \\
+            \vdots      & \vdots        & \ddots    & \vdots \\
+            0           & 0             & \dots     & (d_{nn})^m
+        \end{bmatrix}$\\
+    $\therefore$ we have optimized the calculation of $\mymat{A}^m$ from matrix multiplication of $m$ matrices \\
+    to matrix multiplication of 3 matrices + scalar power of $n$ scalars
+
+    \subsection{Orthogonal Diagonalization}
+    \subsubsection{Orthonormal Set}
+    \paragraph{Definition}
+
+    An orthonormal set of vectors is basically intersecting the concept of orthogonal set and normalization of vectors
+    \vspace{1ex}
+
+    A set of vectors $\myset{W} = \{\myvec{w}_1, \myvec{w}_2, \dots, \myvec{w}_m\}$ is an \textbf{orthonormal set} \\
+    if \textbf{all} the following requirements are satisfied
+    \begin{itemize}
+        \item $\myset{W}$ is orthogonal set
+        \begin{itemize}
+            \item $\dotprod{\myvec{w}_i}{\myvec{w}_j} = 0 \quad \forall\,i, j \in \{1, \dots, m\} \text{ with } i \neq j$
+        \end{itemize}
+        \item $\|\myvec{w}_k\| = 1 \quad \forall\,k \in \{1, \dots, m\}$
+    \end{itemize}
+    \paragraph{Note:} $\myset{W} \not\subset \mathbb{R}^n$
+
+    
+    \subsubsection{Orthogonal Complements}
+    \paragraph{Orthogonal to a Set of Vectors}
+    \begin{quote}
+        a vector $\myvec{z}$ is orthogonal to a vector space $\mysubvecsp{V}$ if \\
+        \[ \dotprod{\myvec{z}}{\myvec{v}} = 0 \quad \forall\,\myvec{v} \in \mysubvecsp{V} \]
+    \end{quote}
+    
+    \paragraph{Orthogonal Complement of a Set of Vectors} 
+    
+    \begin{quote}
+        The \textbf{orthogonal complement} of a vector space $\mysubvecsp{V}$ (denoted~by~$\mysubvecsp{V}^{\perp}$) is the set of \textbf{all}~vectors~$\myvec{z}$ that are orthogonal to $\mysubvecsp{V}$
+        \vspace{1ex}
+        Note:
+        \begin{itemize}
+            \item $\mysubvecsp{V}^{\perp} \subset \mathbb{R}^n$
+            \item any $\myvec{z} \in \mysubvecsp{V}^{\perp}$ is also orthogonal to $\operatorname{Span}(\mysubvecsp{V})$, $\implies \mysubvecsp{V}^{\perp} = (\operatorname{Span}(\mysubvecsp{V}))^{\perp}$
+        \end{itemize}
+    \end{quote}
+    
+    \newpage
+    \subsubsection{Matrices with Orthonormal Column} \label{section3_5_3}
+    A $m \times n$ matrix with orthonormal columns implies that \\
+    by taking the columns as column vectors, all the column vectors forms an orthogonal set
+    
+    \paragraph{$\bm{\mymat{U}^T \mymat{U} = \mymat{I}}$ :}\mbox{}\vspace{1ex}
+
+    Let $\mymat{U} = \begin{bmatrix} \myvec{u}_1 & \myvec{u}_2 & \dots & \myvec{u}_n \end{bmatrix}$ be a $m \times n$ matrix, then
+    \begin{equation}
+        \mymat{U}\text{ has orthonormal columns} \iff \mymat{U}^T \mymat{U} = \mymat{I}
+    \end{equation}
+    Proof:
+    \begin{quote}
+        \begin{align*}
+            \renewcommand{\arraystretch}{1.5}
+            \mymat{U}^{T} \mymat{U} = 
+                \begin{bmatrix} \myvec{u}_1^T \\ \myvec{u}_2^T \\ \vdots \\ \myvec{u}_n^T \end{bmatrix}
+                \begin{bmatrix} \myvec{u}_1 & \myvec{u}_2 & \dots & \myvec{u}_n \end{bmatrix}
+                &= \begin{bmatrix}
+                    \dotprod{\myvec{u}_1}{\myvec{u}_1} & \dotprod{\myvec{u}_1}{\myvec{u}_2} & \dots  & \dotprod{\myvec{u}_1}{\myvec{u}_n} \\
+                    \dotprod{\myvec{u}_2}{\myvec{u}_1} & \dotprod{\myvec{u}_2}{\myvec{u}_2} & \dots  & \dotprod{\myvec{u}_2}{\myvec{u}_n} \\
+                    \vdots & \vdots & \ddots & \vdots \\
+                    \dotprod{\myvec{u}_n}{\myvec{u}_1} & \dotprod{\myvec{u}_n}{\myvec{u}_2} & \dots  & \dotprod{\myvec{u}_n}{\myvec{u}_n}
+                \end{bmatrix}
+        \end{align*}
+        Note that if $\mymat{U}$ has orthonormal column, by definition of orthonormal set
+        \begin{equation*}
+            \dotprod{\myvec{u}_i}{\myvec{u}_j} = \delta_{ij} = \begin{cases}
+                1 & \text{if } i = j \\
+                0 & \text{if } i \ne j
+            \end{cases} \quad \forall\,i, j \in \{1, \dots, n\}
+        \end{equation*}
+        Therefore,
+        \begin{equation*}
+            \mymat{U}^T\mymat{U} = \begin{bmatrix}
+                1       & 0         & \dots     & 0 \\
+                0       & 1         & \dots     & 0 \\
+                \vdots  & \vdots    & \ddots    & \vdots \\
+                0       & 0         & \dots     & 1 
+            \end{bmatrix} = \mymat{I}_{n \times n}
+        \end{equation*}
+    \end{quote}
+
+    \paragraph{Other Properties}\mbox{}\vspace{1ex}
+
+    Let $\mymat{U} = \begin{bmatrix} \myvec{u}_1 & \myvec{u}_2 & \dots & \myvec{u}_n \end{bmatrix}$ be a $m \times n$ matrix with orthonormal columns \\
+    and let $\myvec{x}, \myvec{y} \in \mathbb{R}^n$
+    \begin{itemize}
+        \item \textbf{Length Preservation:} $\|\mymat{U}\myvec{x}\| = \|\myvec{x}\|$ for all $\myvec{x} \in \mathbb{R}^n$.
+        \item \textbf{Dot Product Preservation:} $(\mymat{U}\myvec{x}) \cdot (\mymat{U}\myvec{y}) = \myvec{x} \cdot \myvec{y}$ for all $\myvec{x}, \myvec{y} \in \mathbb{R}^n$.
+        \item $\dotprod{\myvec{x}}{\myvec{y}} = 0 \iff \dotprod{(\mymat{U}\myvec{x})}{(\mymat{U}\myvec{y})} = 0$            
+    \end{itemize}
+    
+    \newpage
+    \subsubsection{Orthogonal Matrix}
+    \paragraph{Definition: } An orthogonal matrix is an invertible (square) matrix $\mymat{U}$ such that
+    \begin{equation}
+        \mymat{U}^{-1} = \mymat{U}^T
+    \end{equation}
+    \paragraph{Notable Properties: }
+    \begin{itemize}
+        \item $\mymat{U}$ is an orthogonal matrix \\ 
+            $\iff \mymat{U}$ is a square matrix with ortho\textbf{normal} columns \\
+            \quad $\implies \mymat{U}^T \mymat{U} = \mymat{I}$ (see subsubsection \ref{section3_5_3})\\
+            $\iff \mymat{U}$ is a square matrix with ortho\textbf{normal} rows \\
+            \quad $\implies \mymat{U} \mymat{U}^T = \mymat{I}$ \\
+        \item The determinant of an orthogonal matrix is always $\pm 1$ \\
+            Proof: 
+            \begin{quote}
+                Let $\mymat{U}$ be any orthogonal matrix, then $\det \mymat{U} \ne 0$,
+                \begin{align*}
+                    \mymat{U}^{-1} &= \mymat{U}^T \\
+                    \det(\mymat{U}^{-1}) &= \det(\mymat{U}^T) \\
+                    \frac{1}{\det\mymat{U}} &= \det \mymat{U} \\
+                    ( \det \mymat{U} )^2 &= 1 \\
+                    \Aboxed{\det \mymat{U} &= \pm 1}
+                \end{align*}
+            \end{quote}
+        \end{itemize}
+    Because of some historic reason, such a matrix is called an orthogonal matrix but not an orthonormal matrix, 
+    but an orthogonal matrix actually \textbf{requires} its set of column vectors (or set of row vectors) to be \textbf{orthogonal and normalized}.
+    
+    \subsubsection{Symmetric Matrix}
+    A matrix $\mymat{A}$ is a symmetric matrix if 
+    \begin{equation}
+        \mymat{A}^T = \mymat{A}
+    \end{equation}
+    A symmetric matrix has its entries symmetric along the diagonal from top-left to bottom-right
+
+    \newpage
+    \subsubsection{Orthogonally Diagonalizable} \label{sec3_5_6}
+    \paragraph{Definition} An $n \times n$ matrix $\mymat{A}$ is \textbf{orthogonally diagonalizable} if there are an orthogonal matrix $\mymat{P}$ and a diagonal matrix $\mymat{D}$ such that
+    \begin{equation}
+        \mymat{A} = \mymat{P}\mymat{D}\mymat{P}^{T} = \mymat{P}\mymat{D}\mymat{P}^{-1}
+    \end{equation}
+    Similar to Orthogonal Matrix, the naming is a bit confusing. \\
+    A \textbf{orthogonally diagonalizable} matrix means that \\
+    \quad the matrix $\mymat{A}$ can be \textbf{diagonalized} by changing the basis into a \\
+    \quad set of \textbf{orthogonal and normalized}~basis~vector~(namely~ortho\textbf{normal}~basis)
+    Therefore, the transition matrix $\mymat{P}$ has to be \\
+    \quad an orthogonal matrix (with ortho\textbf{normal} columns) in \\
+    \quad order for matrix to be orthogonally diagonalizable
+
+    \paragraph{The Spectral Theorem for Real Symmetric Matrices}~\\
+    \quad Let $\mymat{A}$ be a $n \times n$ orthogonally diagonalizable matrix
+    \begin{enumerate}
+        \item orthogonally diagonalizable matrix $\iff$ \textbf{symmetric} matrix ($\mymat{A}^T = \mymat{A}$)
+        \item all eigenvalues of $\mymat{A}$ are \textbf{real}
+        \item for each eigenvalue $\lambda_k$, geometric multiplicity = algebraic multiplicity
+        \item eigenspaces of different eigenvalues are \textbf{orthogonal complements} of each other
+    \end{enumerate}
+
+    \paragraph{Proofs of Properties}
+    \noindent
+    \begin{minipage}{\textwidth}
+        1. orthogonally diagonalizable matrix $\iff$ \textbf{symmetric} matrix ($\mymat{A}^T = \mymat{A}$)
+        \begin{quote}
+            
+        \end{quote}
+    \end{minipage} 
+    \vspace{2ex}
+
+    \begin{minipage}{\textwidth}
+        2. all eigenvalues of a real symmetrix matrix $\mymat{A}$ are \textbf{real}
+        \begin{quote}
+            Let $\lambda_k$ be any eigenvalue of the real matrix $\mymat{A}$ , \\ 
+            and $\myvec{v}_k$ be the corresponding eigenvector (potentially complex)
+            \begin{align*}
+                \mymat{A}\myvec{v}_k &= \lambda_k\myvec{v}_k \\
+                (\mymat{A}\myvec{v}_k)^{*} &= (\lambda_k\myvec{v}_k)^{*} & \text{take conjugate transpose} \\
+                (\myvec{v}_k)^{*} \mymat{A}^T &= \bar{\lambda_k}\,(\myvec{v}_k)^{*} & \text{properties of conjugate transpose} \\
+                (\myvec{v}_k)^{*} \mymat{A} &= \bar{\lambda_k}\,(\myvec{v}_k)^{*} & \text{$\mymat{A}$ is similar} \\
+                (\myvec{v}_k)^{*} \mymat{A}^T\,\myvec{v}_k &= \bar{\lambda_k}\,(\myvec{v}_k)^{*}\,\myvec{v}_k & \text{right-multiply by }\myvec{v}_k \\
+                (\myvec{v}_k)^{*} (\lambda_k \myvec{v}_k) &= \bar{\lambda_k}\,(\myvec{v}_k)^{*}\,\myvec{v}_k & \\
+                \lambda_k (\myvec{v}_k)^{*} \myvec{v}_k &= \bar{\lambda_k}\,(\myvec{v}_k)^{*}\,\myvec{v}_k & \\
+                \lambda_k &= \bar{\lambda_k} & (\myvec{v}_k)^{*}\myvec{v}_k = \|\myvec{v}\|^2 \ne 0 \\
+                \Aboxed{\lambda_k &\in \mathbb{R}}
+            \end{align*}
+        \end{quote}    
+    \end{minipage} 
+    \vspace{2ex}
+
+    \noindent
+    \begin{minipage}{\textwidth}
+        4. eigenspaces of different eigenvalues are \textbf{orthogonal complements} of each other
+        \begin{quote}
+            Let $\lambda_1$ and $\lambda_2$ be two distinct eigenvalues of $\mymat{A}$ \\
+            and let $\myvec{v}_1$ and $\myvec{v}_2$ be the eigenvectors corresponds to $\lambda_1$ and $\lambda_2$ respectively
+            \begin{align*}
+                \lambda_1 \dotprod{\myvec{v}_1}{\myvec{v}_2} &= \dotprod{(\lambda_1 \myvec{v}_1)}{\myvec{v}_2} \\
+                &= \dotprod{(\mymat{A} \myvec{v}_1)}{\myvec{v}_2} \\
+                &= (\mymat{A} \myvec{v}_1)^T \myvec{v}_2 & \dotprod{\myvec{u}_1}{\myvec{u}_2} = \myvec{u}_1^T \myvec{u}_2 \text{ for all real column vectors } \\
+                &= (\myvec{v}_1)^T \mymat{A}^T \myvec{v}_2 \\
+                &= (\myvec{v}_1)^T \mymat{A} \myvec{v}_2 & \mymat{A}^T = \mymat{A}\\
+                &= (\myvec{v}_1)^T (\lambda_2 \myvec{v}_2) \\
+                &= \lambda_2 \dotprod{\myvec{v}_1}{\myvec{v}_2} \\
+                \lambda_1 \dotprod{\myvec{v}_1}{\myvec{v}_2} &= \lambda_2 \dotprod{\myvec{v}_1}{\myvec{v}_2} \\
+                (\lambda_1 - \lambda_2) \dotprod{\myvec{v}_1}{\myvec{v}_2} &= 0 
+            \end{align*}
+            Since $\lambda_1 \ne \lambda_2$, we have $\dotprod{\myvec{v}_1}{\myvec{v}_2} = 0$ \\ 
+            Therefore, for any two distinct eigenvalues of a symmetric matrix, the eigenvectors corresponds to each of them are perpendicular to each other
+        \end{quote}
+    \end{minipage}
+
+    \newpage
+    \subsubsection{Orthogonal Diagonalization of Symmetric Matrices}
+    \paragraph{Gram-Schmidt Orthogonalization Process}~\vspace{1ex}
+
+    The Gram-Schmidt Orthogonalization Process is a useful algorithmic procedure.
+    \\
+    Take it briefly, given a set of basis vectors of any vector space $\mysubvecsp{V} \subseteq \mathbb{R}^n$,\\
+    \quad the process find a set of orthogonal (but not normalized) basis for $\mysubvecsp{V}$ \vspace{1ex}
+    
+    It is as follows:
+    \begin{quote}
+        Let $\{\myvec{w}_1, \myvec{w}_2, \dots, \myvec{w}_n\}$ be a basis for any vector space $\mysubvecsp{V} \subseteq \mathbb{R}^n$, then\\
+        the orthogonal basis $\{\myvec{v}_1, \myvec{v}_2, \dots, \myvec{v}_n\}$ for $\mysubvecsp{V}$ can be found as follows:
+    
+        \begin{align*}
+            \myvec{v}_1 &= \myvec{w}_1 \\
+            \myvec{v}_2 &= \myvec{w}_2 - \frac{\dotprod{\myvec{v}_1}{\myvec{w}_2}}{\dotprod{\myvec{v}_1}{\myvec{v}_1}}\myvec{v}_1 \\
+            \myvec{v}_3 &= \myvec{w}_3 - \frac{\dotprod{\myvec{v}_1}{\myvec{w}_3}}{\dotprod{\myvec{v}_1}{\myvec{v}_1}}\myvec{v}_1 - \frac{\dotprod{\myvec{v}_2}{\myvec{w}_3}}{\dotprod{\myvec{v}_2}{\myvec{v}_2}}\myvec{v}_2 \\
+            \dots \\
+            \myvec{v}_n &= \myvec{w}_n - \sum_{k = 1}^{n-1} \frac{\dotprod{\myvec{v}_k}{\myvec{w}_n}}{\dotprod{\myvec{v}_k}{\myvec{v}_k}}\myvec{v}_k \\
+        \end{align*}
+    \end{quote}
+    The Gram-Schmidt Orthogonalization Process is useful in finding an orthogonal diagonalization.
+    
+    \begin{minipage}{\textwidth}
+        \raggedright
+        \paragraph{Process of Orthogonal Diagonalization}~\vspace{1ex}\\
+        Given a $n \times n$ square matrix $\mymat{A}$, if we want to diagonalize it orthogonally, the steps are:
+        \begin{enumerate}
+            \item check if $\mymat{A}$ is orthogonally diagonalizable, i.e. a symmetric matrix
+            \item find all distinct eigenvalues $\lambda_1, \lambda_2, \dots, \lambda_m$ from $\det(\mymat{A} - \lambda\mymat{I}) = 0$
+            \item substitute all $\lambda_k$ one by one and solve the equation $\mymat{A}\myvec{x}_k=\lambda_k\myvec{x}_k$ for $\myvec{x}_k$
+            \item[-.] we should now have $\myvec{x}_1, \myvec{x}_2, \dots, \myvec{x}_m$, \\
+                some of them may have 1 free variable only, while others have more free variables    
+            \item if $\myvec{x}_k$ has only 1 free variable, because of property 4 mentioned in \ref{sec3_5_6}, it can directly be a vector in the orthogonal basis $\myvec{u}$\vspace{1ex} \\
+                if $\myvec{x}_k$ has more (num = $l$) free variables, get the basis vectors $\myvec{w}_1, \myvec{w}_2, \dots, \myvec{w}_l$ for the eigenspace of $\myvec{x}_k$, 
+                and then use the Gram-Schmidt Orthogonalization Process to process the $\myvec{w}$s into orthogonal basis vectors $\myvec{u}_1, \myvec{u}_2, \dots, \myvec{u}_l$
+            \item[-.] Collect the resulting orthogonal vector $\myvec{u}$s from all the $\myvec{x}$s, there should be $n$ of them, they form the orthogonal eigenbasis
+            \item normalize all $\myvec{u}$s of the orthogonal eigenbasis into orthnormal eigenbasis $\{ \myvec{v}_1, \myvec{v}_2, \dots, \myvec{v}_n \}$
+            \item put the $\myvec{v}$s as columns into a matrix, this is the $\mymat{P}_{\myset{S}\leftarrow\myset{E}}$
+            \item put the eigenvalues $\lambda_1, \dots, \lambda_m$ in the same order as the vector $\myvec{v}$s (a $\lambda_k$ may corresponds to multiple $\myvec{v}$s, just put duplicated $\lambda$s as if u treat the duplicated $\lambda$s differently from the characteristic equation) into the diagonals into a $n \times n$ matrix, this is the diagonalized matrix $\mymat{D}$
+        \end{enumerate}
+    \end{minipage}
+    
+    \newpage
+    \vspace*{\fill}
+    \begin{center}
+        \LARGE
+        \fontfamily{qzc}\selectfont\itshape the end
+    \end{center}
+    \vspace*{\fill}
+    
+\end{document}
